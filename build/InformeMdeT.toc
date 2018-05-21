@@ -1,9 +1,9 @@
 \babel@toc {spanish}{}
 \contentsline {chapter}{Resumen}{\es@scroman {i}}{chapter*.1}
-\contentsline {chapter}{\IeC {\'I}ndice de Figuras}{\es@scroman {iv}}{chapter*.6}
-\contentsline {chapter}{\IeC {\'I}ndice de Tablas}{\es@scroman {v}}{chapter*.7}
-\contentsline {chapter}{\IeC {\'I}ndice de Acr\IeC {\'o}nimos}{\es@scroman {vi}}{chapter*.8}
-\contentsline {chapter}{Agradecimientos}{\es@scroman {vii}}{chapter*.9}
+\contentsline {chapter}{\IeC {\'I}ndice de Figuras}{\es@scroman {iv}}{chapter*.5}
+\contentsline {chapter}{\IeC {\'I}ndice de Tablas}{\es@scroman {v}}{chapter*.6}
+\contentsline {chapter}{\IeC {\'I}ndice de Acr\IeC {\'o}nimos}{\es@scroman {vi}}{chapter*.7}
+\contentsline {chapter}{Agradecimientos}{\es@scroman {vii}}{chapter*.8}
 \contentsline {chapter}{\numberline {1}Introducci\IeC {\'o}n}{1}{chapter.1}
 \contentsline {section}{\numberline {1.1}Antecedentes Hist\IeC {\'o}ricos}{1}{section.1.1}
 \contentsline {section}{\numberline {1.2}Definici\IeC {\'o}n del Problema}{1}{section.1.2}

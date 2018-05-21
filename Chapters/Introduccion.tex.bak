@@ -7,7 +7,11 @@
 % ***********************************************************************************
 \section{Antecedentes Históricos}
 
-Breve reseña histórica que involucra desarrollo de la tecnología a utilizar y principalmente que dió origen al problema que se quiere solucionar.
+En la década de los 60's el Departamento de Defensa de los Estados Unidos desarrolló el primer prototipo de un sistema de geolocalización basado en estaciones terrestres que mediante el cálculo de la diferencia de fases de la señales emitidas a estas les permitía determinar su posición. Años más tarde, en la década de los 70's los programas de la armada y de la Fuerza Aérea desarrollaron un sistema mejorado que les permitía determinar posiciones en el planeta mediante el uso de 24 satélites dispuestos a 20.200 km.\\
+
+Mediante el uso de un método matemático llamado Trilateración, son capaces de usar los satélites y la cobertura que ofrecen sobre la superficie de la tierra, comparar la posición del dispositivo, con otras 3 unidades fijas de distancia.\\
+
+Sin embargo, dicho método no aplica para espacios indoor y es allí donde aparece el \ac{IPS}, el cual fue desarrollado 
 
 
 
