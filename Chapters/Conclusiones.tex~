@@ -1,0 +1,43 @@
+\chapter{Conclusiones}
+
+% ***********************************************************************************
+% \section{Sumario}
+
+% ***********************************************************************************
+\section{Conclusiones}
+En el presente Informe de Tesis, se ha propuesto, estudiado y desarrollado una nueva técnica de corrección de \ac{NU}, utilizando un sistema de cancelación de ruido como base teórica. La principal contribución de esta solución es que utilizando una técnica bien conocida en aplicaciones de audio más algunas consideraciones simples y no restrictivas, se ha desarrollado un algoritmo en el cual todos los cálculos se ven implementados en una simple y única ecuación. Más aun, esta ecuación se puede utilizar en su versión recursiva permitiendo obtener un performance satisfactorio tanto con métricas cuantitativas como cualitativas.
+
+El desempeño del presente algoritmo depende escencialmente del número de frames utilizados y no impone ninguna restricción teórica sobre la escena que está siendo capturada. La única restricción que se impone es que exista una muy alta correlación entre la entrada secundaria y el ruido que se quiere cancelar, y una muy baja correlación con la señal de información. Estas restricciones se aplican de manera satisfactoria al implementar una técnica de NUC. Esta correlación permite inferir que modelando mejor el ruido aditivo, se logrará un mejor desempeño general, pero es probable de que esta mejora implique la utilización de filtros adaptivos, perdiendo la simplicidad de la solución que es punto más importante de esta implementación.
+
+Se presentaron resultados sobre cámaras \ac{IR} que operan en dos bandas distintas, y con tecnologías diferentes que corroboran la habilidad del algoritmo de compensar la componente aditiva del \ac{FPN}. De acuerdo con evaluaciones de ojo desnudo, se registra una calidad de imagen sorprendente a pesar de la simplicidad de los cálculos, lo que sumado a que solo se requiere un buffer de $P\times Q$ pixeles, lo hacen ser una excelente alternativa a implementar en cámaras comerciales.
+
+A pesar de la efectividad de la metodología en compensar el \ac{FPN} y solucionar problemas como los pixeles muertos, presenta el problema de \textit{ghosting} como la mayoría de los métodos de \ac{NUC} basados en imágenes
+
+Es importante que aun cuando el algoritmo se asemeja al método de \ac{CS} de Harris, no requiere tener una entrada con distribución Gaussiana, media nula y varianza unitaria, que resulta ser la restricción más fuerte hecha por Harris.
+
+Como último punto importante, dado que se deben realizar procesamientos paralelos y simples, quizás una buena alternativa es testear el algoritmo en tiempo real con tarjetas de alto desempeño de cálculo.
+
+% ***********************************************************************************
+\section{Trabajo Futuro}
+A continuación se listan las posibles líneas de investigación que se deducen directamente de la presente obra.
+\begin{enumerate}
+ \item Eliminar los frames repetidos en la versión recursiva del algoritmo para lograr reducción del ghosting. Actualmente se trabaja en esta técnica.
+\item Utilizar un modelo acabado del ruido aditivo. Estimar los parámetros de dicho modelo con alguna técnica adaptiva para luego entrar al sistema de cancelación de ruido y estudiar el desempeño del esquema global.
+\item Implementar un equalizador o alguna otra técnica de cancelación de ruido multiplicativo para eliminar la ganancia. Actualmente se trabaja en esta técnica.
+\item Realizar pruebas de procesamiento paralelo de los detectores para implementar corrección en tiempo real.
+\item Modelar el proceso de cancelación de ruido con un filtro adaptivo que logre estimar el offset en un número menor de frames que la técnica acá expuesta.
+\end{enumerate}
+
+% ***********************************************************************************
+\section{Publicación}
+El presente trabajo, dio origen a la publicación en la revista Applied Optics de la Optical Society of America, OSA.
+
+\vspace{1cm}
+\begin{flushleft}
+ \textit{``Noise-cancellation--based nonuniformity correction algorithm for infrared focal-plane arrays''}\\
+Sebastián E. Godoy, Jorge E. Pezoa, and Sergio N. Torres\\
+Applied Optics, Vol. \textbf{47}, Issue 29, pp. 5394-5399\\       doi:10.1364/AO.47.005394
+\end{flushleft}
+\vspace{1cm}
+
+Dicha publicación se adjunta al final del presente Informe.

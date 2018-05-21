@@ -1,0 +1,32 @@
+% ***********************************************************************************
+% ---------------------                PORTADA                  ---------------------
+% ***********************************************************************************
+%MEMBRETE
+\includegraphics[width=1.5cm]{Figures/Escudo}
+\put(10,38){UNIVERSIDAD DE CONCEPCIÓN0}
+\put(10,23){FACULTAD DE INGENIERÍA}
+\put(10,8){DEPARTAMENTO DE INGENIERÍA ELÉCTRICA}
+
+
+\vspace{0.3cm}
+\large
+\begin{flushright}
+\textbf{Prof. Patrocinante:}\\
+Nombre Profesor, Grado académico.
+\end{flushright}
+
+\vspace{3.5cm}
+\begin{center}
+\LARGE \textbf{Acá va el Nombre de la Memoria de Título}\\
+
+\vspace{1cm}
+\Large \textbf{Nombre Completo Alumno}
+
+\vspace{0.9cm}
+Informe de Memoria de Título para optar al Título de \\Ingeniero Civil en Telecomunicaciones
+
+\vspace{2.5cm}
+Concepción, Chile. \\
+\today
+\end{center}
+\normalsize

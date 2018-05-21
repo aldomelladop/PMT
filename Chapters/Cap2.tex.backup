@@ -1,0 +1,12 @@
+\chapter{Nombre del Capítulo}
+% ***********************************************************************************
+\section{Introducción}
+Es importante que dada capitulo tenga una pequeña introducción. Esto justifica plenamente el tener dicho capítulo en el informe.
+
+% ***********************************************************************************
+\section{Otros comentarios...}
+
+Es importante que no se pueden tener más de 3 niveles en la escritura. Entiéndase que se puede tener ``section'', ``subsection'' y ``subsubsection'' solamente.
+
+% ***********************************************************************************
+\section{Otras secciones...}

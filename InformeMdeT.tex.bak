@@ -1,0 +1,147 @@
+\documentclass[letterpaper,oneside,12pt]{book}
+
+% Para asegurar compatibilidad en Windows y GNU/Linux
+\usepackage[utf8]{inputenc}
+
+% Idioma de entrada
+\usepackage[spanish]{babel}
+
+% Márgenes conforme a lo requerido en el reglamento de pregrado.
+\usepackage[right=2cm,left=2.5cm,top=2.5cm,bottom=2.8cm,headsep=1cm,footskip=1.5cm]{geometry}
+
+% Cabeceras y pie de página en páginas internas
+\usepackage{fancyhdr}
+
+% Para insertar gráficos, figuras y tablas
+\usepackage{graphicx,tabularx,latexsym}
+
+% Matemáticas avanzadas
+\usepackage{amsthm,amsmath,amssymb,amsfonts}
+
+\usepackage[hyperindex,colorlinks=true,linkcolor=blue,filecolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+% \usepackage[final]{pdfpages}
+
+% Para legras griegas en negrita.
+\usepackage{bm}
+
+% Fancy enumerate :P
+\usepackage{enumerate}
+
+% Para poder usar acrónimos
+\usepackage{acronym}
+
+% Para tener subfiguras
+\usepackage{subfigure}
+
+
+% ***********************************************************************************
+% ***********************************************************************************
+\begin{document}
+
+
+% ***********************************************************************************
+% Redefinir nombres conforme reglamento de pregrado.
+\renewcommand{\contentsname}{Índice General}
+\renewcommand{\figurename}{\textbf{Fig.}}
+\renewcommand{\tablename}{\textbf{Tabla}}
+\renewcommand{\listfigurename}{Índice de Figuras}
+\renewcommand{\listtablename}{Índice de Tablas}
+%\renewcommand{\listofacronyms}{Índice de Acrónimos}
+
+% Redefinir espaciado simple a 1.5, conforme a reglamento.
+\renewcommand{\baselinestretch}{1.5}
+
+% Los capítulos se trabajan en forma independiente para no tener un solo archivo .tex sobrecargado con información. Luego cada uno de los archivos se inserta en el archivo global mediante el comando \input{}. Uno de los mejores puntos de esta forma de trabajar es que se pueden realizar cambios en algunas partes sin perder la información de todo el documento.
+
+% ***********************************************************************************
+% PORTADA
+\thispagestyle{empty}
+\input{Chapters/Portada}
+
+% ***********************************************************************************
+% RESUMEN
+\newpage 
+\pagestyle{plain}	% Para no tener encabezado
+\pagenumbering{roman}	% Para numerar en forma romana, i.e. I, II, III, etc.
+\input{Chapters/Resumen}
+\addcontentsline{toc}{chapter}{Resumen} % Para agregar el resumen al índice como un capítulo más, pero sin número.
+
+% ***********************************************************************************
+% INDICE GENERAL: Requerido por reglamento
+\newpage
+\tableofcontents
+
+% INDICE DE FIGURAS: No es requerido, pero se agradece por facilitar corrección
+\newpage
+\listoffigures
+\addcontentsline{toc}{chapter}{\listfigurename}
+
+% % INDICE DE TABLAS: No es requerido, pero se agradece por facilitar corrección
+\newpage
+\listoftables
+\addcontentsline{toc}{chapter}{\listtablename}
+
+\newpage
+\chapter*{Lista de Acrónimos}
+%\listofacronyms
+%\addcontentsline{toc}{chapter}{\listofacronyms}
+\addcontentsline{toc}{chapter}{Índice de Acrónimos}
+% ***********************************************************************************
+% Acronym definitions
+\begin{acronym}
+\acro{IR}{Infrarroja}
+\acro{GPS}{Global Positioning System}   	
+\acro{AP}{Access Point}
+\acrodefplural{APs}{Puntos de Acceso}
+\acro{IPS}{Sistema de posicionamiento Indoor}
+\end{acronym}
+
+% ***********************************************************************************
+
+
+% ***********************************************************************************
+\newpage
+\input{Chapters/Thnks}
+\addcontentsline{toc}{chapter}{Agradecimientos}
+
+
+% ***********************************************************************************
+\newpage
+\pagestyle{fancy} 	% Se introduce la cabecera previamente definida
+\pagenumbering{arabic}	% Se numera de forma normal.
+\input{Chapters/Introduccion}
+
+ 
+% ***********************************************************************************
+\newpage
+\input{Chapters/Cap2}
+
+
+% ***********************************************************************************
+\newpage
+\input{Chapters/Cap3}
+
+% ***********************************************************************************
+\newpage
+\input{Chapters/ResultadosAnalisis}
+
+
+% ***********************************************************************************
+\newpage
+\input{Chapters/Conclusiones}
+
+
+% % ***********************************************************************************
+% % ---------------------            BIBLIOGRAFIA                 ---------------------
+% % ***********************************************************************************
+% \newpage
+% \bibliographystyle{unsrt}
+% \bibliography{/home/sb/LatexStuffs/books}
+% \addcontentsline{toc}{chapter}{Bibliografía}
+
+% **********************************************************************************
+% índice alfabético
+% \newpage
+% \printindex
+
+\end{document}

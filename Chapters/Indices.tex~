@@ -1,0 +1,16 @@
+% ***********************************************************************************
+% ---------------------                INDICES                  ---------------------
+% ***********************************************************************************
+% GENERAL
+\newpage
+\tableofcontents
+
+% FIGURAS
+\newpage
+\listoffigures
+\addcontentsline{toc}{chapter}{\listfigurename}
+
+% % TABLAS
+% \newpage
+% \listoftables
+% \addcontentsline{toc}{chapter}{\listtablename}

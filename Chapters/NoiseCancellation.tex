@@ -1,0 +1,582 @@
+\chapter{Método de Cancelación de Ruido}
+
+% ***********************************************************************************
+% ***********************************************************************************
+\section{Introducción}
+En un ambiente ruidoso una señal de interés puede estar corrupta por ruido aditivo, haciendo que los detectores capturen información distorsionada. Esta situación resulta ser algo indeseable, pero lamentablemente se da en la mayoría de los casos prácticos. Como solución, se han desarrollado variadas técnicas de filtrado que intentan suprimir o minimizar dicho ruido agregado, permitiendo obtener la señal de interés de forma casi intacta.
+
+La forma usual de realizar la estimación de dicha señal corrupta es haciendola pasar por un filtro que tiende a suprimir el ruido, dejando la señal practicamente sin cambios. El diseño de estos filtros están en el dominio de filtrado óptimo que fue originado con el trabajo pionero de Wiener, y que fue extendido por Kalman, Bucy, y otros \cite{torres-phdthesis}.
+
+% Los filtros antes explicados, pueden ser tanto fijos como adaptivos. El diseño de filtros fijos está basado en algún tipo de conocimiento \textit{a priori} que se tenga tanto de la señal como del ruido a eliminar. Para el caso de filtros adaptivos en cambio, éstos tienen la habilidad de ajustar sus propios parámetros de forma automática y su diseño requiere muy poco o nada de conocimiento acerca de las características de la señal o el ruido.
+
+El método de cancelación de ruido, \ac{NC}, es una variación de los filtros óptimos y resulta ser muy ventajoso en varias aplicaciones. Hace uso de una entrada secundaria que corresponde a una referencia dada por sensores ubicados en puntos de la fuente del ruido en los cuales la señal es débil o indetectable. Esta entrada se filtra y resta a la entrada primaria que contiene la superposición de la señal y el ruido, obteniendo como resultado una atenuación o eliminación total del ruido aditivo que presenta la señal corrupta.
+
+En primera instancia, el proceso de substracción de ruido de la señal recibida parece ser un proceso peligroso, en el sentido de que si no se hace de forma correcta, podría resultar en un aumento de la potencia promedio del ruido de salida. Sin embargo, si el proceso de filtrado+resta se realiza de forma controlada la eliminación del ruido se puede realizar de forma efectiva con un muy bajo riesgo de modificar la señal o tener un aumento en la potencia del ruido de salida. Así, en las circunstancias en que se pueda aplicar el método de \ac{NC}, los niveles de reducción de ruido que se alcanzan son muy dificiles, ó simplemente imposibles de lograr con un filtrado directo.
+
+Basándose en este último punto, la idea global de la presente investigación se enmarca en lo contenido en el presente capítulo en donde se estudia la posibilidad de utilizar un sistema de \ac{NC} para eliminar el ruido presente en imágenes \ac{IR}.
+
+% ***********************************************************************************
+% ***********************************************************************************
+\section{Método de Cancelación de Ruido}
+La Fig.~\ref{Fig:NC-Original} muestra el problema básico en donde se genera una señal $S$ corrupta por ruido aditivo $B$, y como se soluciona mediante el sistema bajo estudio. La idea principal, es que la señal $S$ es transmitida a un sensor que también recibe un ruido aditivo $B$. Como primera consideración, se asume que el ruido aditivo no está correlacionado con la señal, vale decir
+\begin{equation}
+ \E{S[k]~B[k-k_0]} = 0,~~~\forall k_0~.
+ \label{Eq:xcorSB}
+\end{equation}
+
+\begin{figure}[tb]
+ \centering
+ \includegraphics[scale=0.75]{Figures/BlockDiagram-Original}
+ \caption{Diagrama de Bloques del NCS.}
+ \label{Fig:NC-Original}
+\end{figure}
+
+El segundo sensor recibe una señal de ruido $B'$ que está originado por la misma fuente de ruido que $B$, pero se transmite a través de un canal desconocido. Esto implica que el ruido secundario $B'$ no está correlacionado con la señal, pero si está correlacionado con la señal de ruido primaria $B$ de alguna forma. Entonces,
+\begin{eqnarray}
+ \E{S[k]~B'[k-k_0]} &=& 0,\mbox{ y,} \label{Eq:xcorSBp} \\
+ \E{B[k]~B'[k-k_0]} &=& p(k_0)~, \label{Eq:xcorBBp}
+\end{eqnarray}
+para todo $k_0$. La función $p(k_0)$ es la función de correlación cruzada para el \textit{lag} $k_0$ y que no necesariamente es conocida.
+
+Esta señal secundaria, $B'$, se hace pasar a través de un filtro para generar la señal $G$. Se pretende que el filtro a su salida genere una réplica de $B$, que sea lo más parecida posible a ésta. Así, esta señal se substrae de la señal primaria para producir la salida del sistema dada por:
+\begin{equation}
+ e = S + B - G
+ \label{Eq:NC-Error}
+\end{equation}
+
+Si se conocen las características del canal sobre el que se transmitieron las señales de ruido a la entrada primaria y secundaria, entonces se puede diseñar un filtro fijo que permita convertir $B'$ en $B$, obteniendo a la salida del sistema la señal netamente de información $S$. En parte, esto resulta ser bastante cierto al momento de estimar las fuentes de ruido que modelan en comportamiento de un \ac{IR}-\ac{FPA}, ya que se han estudiado con bastante detalle en la literatura y también en la presente Tesis. %Por otra parte, en la mayoría de los casos los patrones no son conocidos, o lo son solo en forma aproximada por lo que utilizar algún filtro fijo no es del todo correcto; de existir uno que cumpla las características, su característica debería ser ajustada con una precisión dificil de obtener, lo que posiblemente involucraría un nivel de potencia media del ruido superior en la salida del sistema.
+
+
+% ***********************************************************************************
+\subsection{Análisis Preliminar}
+Considérese que las señales $S$, $B$, $B'$ y $G$ son estadísticamente estacionarias con media distinta de cero y que se cumplen las condiciones de correlación entre ellas, conforme a las Ecuaciones~(\ref{Eq:xcorSB}), (\ref{Eq:xcorSBp}) y (\ref{Eq:xcorBBp}).
+
+Así, la esperanza de la salida cuadrática del sistema, estará dada por:
+\begin{eqnarray}\nonumber
+ \E{e^2} &=& \E{(S + B - G)^2}\\\nonumber
+ &=& \E{S^2 + 2S(B-G) + (B-G)^2}\\
+ &=& \E{S^2} + 2\E{S(B-G)} + \E{(B-G)^2}\label{Eq:OutputExpectation}
+\end{eqnarray}
+
+Considerando que se busca estimar $B$ lo mejor posible, al realizar esto se está minimizando la diferencia $B-G$. Entonces, la potencia de la señal de información, $\E{S^2}$, no se verá alterada al diseñar y ajustar el filtro para minimizar la potencia de salida; consecuentemente:
+\begin{equation}
+ \min\left[\E{e^2}\right] = \E{S^2} + \min\left[2\E{S(B-G)} + \E{(B-G)^2}\right]~.
+\end{equation}
+en donde se ha considerado que la media de la señal es distinta de cero. En caso de trabajar con una señal de media nula, entonces el término $2\E{S(B-G)}$ será cero y la minimización de la potencia de salida tampoco afectará la potencia de la señal de interés, $S$. Visto de forma inversa, al minimizar el error de salida, la diferencia entre la señal estimada por el filtro y el ruido en la entrada primaria también se minimiza. En otras palabras, $G$ es la mejor aproximación de $B$ en el sentido de mínimos cuadrados. Además, como $e-S = B-G$, el ajuste del filtro minimizará también la diferencia $\E{(e - S)^2}$, obteniendo a la salida la señal practicamente libre de ruido.
+
+En resumen, el realizar un diseño del filtro que minimice la potencia total de la salida, permite que la salida del sistema, $e$, se ajuste lo mejor posible a la señal de interés, $S$, en el sentido de mínimos cuadrados. Además, dicha minimización logra que la potencia promedio del ruido de salida, $\E{(B-G)^2}$, sea también mínima, por lo que la razón señal-ruido a la salida del sistema se verá incrementada a su valor máximo, \cite{widrow75-ncs}.
+
+Se puede notar de la Ecuación~(\ref{Eq:OutputExpectation}) que la potencia máxima de salida es $\E{e^2}=\E{S^2}$. Cuando se logra esto, la potencia de error $\E{(B-G)^2}=0$, por lo que la salida es la señal totalmente limpia de ruido aditivo.
+
+Resulta muy interesante notar que de no haber correlación entre el ruido auxiliar y la entrada primaria, entonces el filtro se ``apagará'' automáticamente (haciendo que todos los coeficientes del filtro sean nulos) y la potencia total del ruido de salida no se verá incrementada. En efecto, al considerar que no existe correlación entre la fuente de ruido primaria y la secundaria, entonces la salida del filtro tampoco estará correlacionada con la entrada primaria, es decir $\E{G[k]Y[k-k_0]} = 0$, por lo que la potencia de salida será entonces
+$$\E{e^2} = \E{(Y - G)^2} = \E{Y^2 - 2YG + G^2} = \E{Y^2} + \E{G^2}~.$$
+Entonces, al realizar la minimización del error de salida, implicaría minimizar al máximo $\E{G^2}$, que se lograría solo haciendo todos los pesos del filtro iguales a cero, para tener $\E{G^2} = 0$. Esto resulta ser un resultado realmente importante pues dice que a pesar de no tener un ruido correlacionado, la potencia del ruido de  salida no se verá aumentada.
+
+% ***********************************************************************************
+% ***********************************************************************************
+\section{Análisis utilizando Filtros Wiener}
+De acuerdo a la literatura, ya sea para un filtro fijo o adaptivo, la respuesta a entrada impulso óptima de un filtro $H(z)$ corresponde a la obtenida por medio del análisis de los filtros Wiener, \cite{haykin,gustafsson}. En otras palabras, si se trabajara con un filtro adaptivo en estado estacionario, su desempeño es similar al de un filtro Wiener estacionario, por lo que el análisis de la teoría de Wiener permite determinar el desempeño óptimo.
+
+La idea de esta sección, es demostrar en forma analítica algunas ventajas del esquema \ac{NC} frente al filtrado tradicional.
+
+Considérese un filtro fijo, con entrada $u[k]$, salida $g[k]$ y señal deseada $d[k]$, que tiene una función de transferencia $H(z)$. La señal de error está determinada por $e[k] = d[k] - g[k]$, en forma análoga a lo discutido respecto de la Fig.~\ref{Fig:NC-Original}. Todas las señales se asumirán en tiempo discreto y estadísticamente estacionarias. Asumiendo que el filtro es lineal, discreto y diseñado para ser óptimo en en el sentido de mínimos cuadrados, se tiene que la respuesta a entrada impulso óptima se puede obtener de la siguiente forma, \cite{haykin,gustafsson,proakis-dsp}. La función de correlación discreta está definida por, \cite{proakis-dsp}
+\begin{equation}
+ R_{xy}[n] ~=~ \E{x[k+n]~y[k]}~,
+\label{Eq:CrossCorrelation}
+\end{equation}
+por lo que la autocorrelación para la entrada del filtro, $u[k]$, es
+$$R_{uu}[n] = \E{u[k+n]~u[k]}~ ,$$
+y la correlación cruzada entre la entrada al filtro y la señal deseada está determinada por la relación
+$$R_{ud}[n] = \E{u[k+n]~d[k]}~ .$$
+
+La respuesta a entrada impulso óptima, $h^*[k]$, se puede calcular mediante la \textit{ecuación de Wiener-Hopf} que está determinada por, \cite{gustafsson}
+\begin{equation}
+ \sum_{i=-\infty}^{\infty} h^*[i]~R_{uu}[n-i] = R_{ud}[n]~.
+\label{Eq:WienerHopf}
+\end{equation}
+% Considerando que el lado izquierdo de la ecuación corresponde a la definición de convolución entre las señales, entonces se puede escribir $h^*[k]\ast R_{uu}[n] = R_{ud}[n]$.
+Esta forma se ha encontrado sin hacer ningun tipo de consideración particular sobre el filtro, por lo que puede ser causal o no-causal, finito o infinito.
+
+La densidad espectral de potencia de un proceso aleatorio discreto, está deteminado por la transformada $Z$ de su función de autocorrelación, luego se tiene
+$$S_{uu}(z) \triangleq \sum_{n=-\infty}^{\infty} R_{uu}[n] z^{-n}~,
+\mbox{ y,   }~ S_{ud}(z) \triangleq \sum_{n=-\infty}^{\infty} R_{ud}[n] z^{-n}~.$$
+
+Entonces, la función de transferencia del filtro Wiener $H(z) = \sum_{n=\infty}^{\infty} h[n] z^{-n}$ está determinada por
+\begin{equation}
+ H(z) = \frac{S_{uu}(z)}{S_{ud}(z)}~,
+\end{equation}
+en donde se ha considerado que el lado izquierdo de la Ecuación~(\ref{Eq:WienerHopf}) corresponde a la definición de convolución. Este desarrollo marca el paso inicial en el análisis teórico del \ac{NC}.
+
+\subsection{Analogía con Método de Cancelación de Ruido}
+Ahora bien, para el caso del \ac{NC} el error corresponde a la salida del sistema lo que a su vez permite concluir que la señal deseada será simplemente la entrada primaria al \ac{NC}. La entrada al filtro, $u[k]$, es la entrada secundaria que corresponde al ruido correlacionado. Para el presente análisis se considerará que $B'[k]$ está compuesto por dos componentes: una correlacionada con el ruido aditivo que afecta a la entrada primaria que se denominará $B_c[k]$, y una componente no-correlacionada que se denominará $M[k]$, que podría provenir de una mala definición de la entrada secundaria. En símbolos, se considerará que $B'[k] = M[k] + B_c[k]$. Para el caso de la componente correlacionada se considerará que proviene de la misma fuente que el ruido aditivo de la entrada primaria, pero ha llegado a la entrada secundaria pasando por un bloque $C(z)$ desconocido, luego $B_c[k] = B[k]\ast C[k]$. Así, la entrada de referencia será $B'[k] = M[k] + B[k]\ast C[k]$, por lo que al aplicarle transformada $Z$ a su función de autocorrelación se obtiene, \cite{}
+\begin{equation}
+ S_{uu}(z) = S_{MM}(z) + S_{BB}(z)\mid C(z)\mid^2~.
+\end{equation}
+De forma análoga, la función de correlación para la señal deseada y la entrada al filtro es
+\begin{equation}
+ S_{ud}(z) = S_{BB}(z)~C\left( z^{-1}\right)~,
+\end{equation}
+por lo que la función de transferencia estará determinado por
+\begin{equation}
+  H(z) = \frac{S_{BB}(z)~C\left( z^{-1}\right)}{S_{MM}(z) + S_{BB}(z)\mid C(z)\mid^2}~,
+\end{equation}
+en donde se puede observar que $H(z)$ es independiente de la señal original.
+
+Cuando se da el caso de que no existe ruido no-correlacionado $M[k]$ en la entrada auxiliar del esquema, entonces la función de transferencia del esquema \ac{NC} estará determinada por
+$$H(z) = \frac{1}{C(z)}~,$$
+lo que permite considerar el sistema de cancelación de ruido como un equalizador del canal que relaciona ambos ruidos, \cite{widrow75-ncs}.
+
+Esto permite inferir que teoricamente hablando, el NC representa una cancelación del canal de comunicacion del ruido la entrada secundaria, para luego, al realizar la resta, cancelarlo en forma completa.
+
+
+% ***********************************************************************************
+% ***********************************************************************************
+\section{Aplicación del NC al problema de NUC}
+Para aplicar un sistema \ac{NC} para solucionar se debe estudiar si se cumplen las condiciones antes mencionadas tanto en la presentación del esquema como en el análisis de su comportamiento. A continuación se analizan cada una de ellas y como se dan para aplicarla como técnica de \ac{NUC}.
+
+\begin{description}
+% ***********************
+ \item[Ruido a eliminar.] Conforme a la naturaleza y a la concepción del esquema \ac{NC} se debe filtrar ruido aditivo. Para el caso de \ac{NUC} se ha dicho que la componente aditiva del \ac{FPN} es predominante en la mayoría de los casos, por lo que en primera instancia se debería corregir el offset y luego estudiar la posibilidad de utilizar el \ac{NC} para compensar la ganancia.
+% ***********************
+ \item[Correlación Señal-Ruido Aditivo.] En base a que para un \ac{IR} \ac{FPA} el ruido aditivo depende principalmente de la corriente oscura, y la señal depende exclusivamente la imagen que está siendo capturada, la correlación cruzada de ambas es realmente baja o nula, \cite{godoy-ncs}.
+% ***********************
+ \item[Señal de Ruido Correlacionado.] Para tener una técnica de \ac{NUC} clasificable como ``basada en procesamiento de señales'', no se deben tener referencias físicas del ruido, por lo que se utilizará una señal de ruido secundario simulada por software. En palabras simples, se utilizará una fuente con un comportamiento similar a un \ac{BB}. La calidad de esta señal de ruido determinará en forma exclusiva el comportamiento del esquema de \ac{NUC} conforme a lo que se discutió en la sección anterior.
+% ***********************
+ \item[Correlación Señal-Ruido Secundario.] Considerando que se tendrá un control total sobre la señal de ruido simulado, entonces al momento de definirla se puede asegurar una correlación mínima entre ambas señales. Este punto resulta de vital importancia, pues la presencia de señal en la entrada auxiliar hará que parte de la señal se elimine en el proceso.
+% ***********************
+ \item[Correlación Ruido Aditivo-Ruido Secundario.] Nuevamente, como se tiene control sobre el ruido secundario, el problema se traduce en lograr una simulación correcta de esta señal de ruido. Como se explicó en la sección anterior, la falta de correlación no aumentará la potencia del ruido de salida, por lo que existe mayor libertad en este punto.
+\end{description}
+
+% ***********************************************************************************
+% ***********************************************************************************
+\section{Cancelación de Offset usando NC}\label{Sec:CancelacionOffset}
+Conforme a la literatura existente~\cite{godoy-ncs,sakoglu-spec}, la componente aditiva del \ac{FPN} es predominante con respecto a la componente multiplicativa, por lo que en muchos casos basta con compensar la primera para obtener resultados muy buenos. Este punto se ve reafirmado por la Fig.~\ref{Fig:AmberGainTPC-hist} en donde se puede notar que la ganancia está en las vecindades de uno y posee una variabilidad muy pequeña.
+%Esto además permite obtener una primera impresión de la capacidad de corrección del esquema planteado, siendo en definitiva la primera etapa del esquema de \ac{NUC}. 
+
+Para lograr dicho objetivo se deben realizar algunas modificaciones en el modelo lineal de \ac{FPA}, dado en la Ecuación~(\ref{Eq:FullModel}). Pérmitase entonces, trabajar bajo el amparo de las siguientes consideraciones:
+
+\begin{description}
+ \item[A1.] Como en muchas soluciones que se encuentran en la literatura \cite{zhou-tpc,reeves-thesis,pezoa-cov}, el ruido temporal $V_{i,j}[k]$ no se considerará en la primera formulación de este algoritmo. Particulamente, esto se puede justificar por el trabajo previo realizado por Reeves en \cite{reeves-thesis}, en donde se demuestra que la corrección con o sin la consideración del ruido temporal no afecta mayormente los resultados pues los niveles de \ac{NU} son mucho mayores.
+
+ \item[A2.] El procesamiento se realizará dentro de una ventana de tiempo, de no más de unos minutos de duración. Dada las características del \ac{FPN} estudiadas en la literatura \cite{sakoglu-algebraic04,jara-thesis}, las variaciones de la ganancia y offset se consideran despreciables dentro de dicha ventana. En símbolos, se quiere decir que $A_{i,j}[k] \approx A_{i,j}$ y $B_{i,j}[k] \approx B_{i,j}$ para todos los frames contenidos en la ventana de $K$ frames.
+
+ \item[A3.] Dado que solo se sintetizará la componente aditiva de la nouniformidad, pérmitase definir la nueva variable $S_{i,j}[k]$ como la aproximación de la radiación incidente. En símbolos, $S_{i,j}[k]=A_{i,j} X_{i,j}[k]$.
+\end{description}
+
+Con estas consideraciones, el modelo a sintetizar mediante el filtro se reduce a:
+\begin{equation}
+ Y_{i,j}[k] = S_{i,j}[k] + B_{i,j}  \label{Eq:BiasModel}
+\end{equation}
+
+Para simplificar la notación, los subíndices $i,j$ serán eliminados del desarrollo, pero se debe tener en cuenta que todas las operaciones en adelante descritas, son hechas en un procesamiento píxel-a-píxel. 
+
+
+% ***********************************************************************************
+\subsection{Diseño del Filtro}
+El filtro fijo a diseñar, que se denotará como $H(z)$, se realiza mediante el algoritmo LMS ya que resulta ser simple pero lo suficientemente poderoso para evaluar los beneficios prácticos de la topología que se plantea, \cite{haykin}. Entonces, se toman las siguientes consideraciones adicionales :
+
+\begin{description}
+ \item[A4.] El sistema \ac{NC} está formado por un filtro invariante en el tiempo, \ac{LTI},  y de respuesta finita a entrada impulso, \ac{FIR}. El filtro posee $N$ taps que se denotarán como $h_n$, con $n=0,\ldots,N-1$.
+
+ \item[A5.] Las señales $Y\equiv Y[k]$ y $B'\equiv B'[k]$ son procesos aleatorios estacionarios.
+\end{description}
+
+\vspace{0.5cm}
+El MSE del error de salida de la Figura~\ref{Fig:NC-Original}, $e[k]$, estará determinado por
+\begin{eqnarray}\nonumber
+ MSE &\triangleq& \E{e[k]^2}\\\nonumber
+ &=& \E{(Y[k] - G[k])^2}\\\nonumber
+ &=& \E{Y[k]^2} - 2~\E{Y[k]~G[k]} + \E{G[k]^2}\\\nonumber
+ &=& \E{Y[k]^2} - 2~\E{Y[k]~(h[k]\ast B'[k])} + \E{(h[k]\ast B'[k])^2} \\\nonumber
+ &=& \E{Y[k]^2} - 2~\E{Y[k]~\sum_{i=0}^{N-1}h_i~B'[k-i]} + \E{\left(\sum_{i=0}^{N-1} h_i~B'[k-i]\right)^2} \\
+ &=& R_{YY}[0] - 2~\sum_{i=0}^{N-1}h_i~R_{B'Y}[i] + \sum_{i=0}^{N-1}\sum_{j=0}^{N-1}h_i~h_j~ R_{B'B'}[i-j]
+\label{Eq:MSE}
+\end{eqnarray}
+en donde $R_{YY}[n] = \E{Y[k]Y[k-n]}$ y $R_{B'B'}[n] = \E{B'[k] B'[k-n]}$ son las funciones de autocorrelación de $Y[k]$ y $B'[k]$ respectivamente; y $R_{B'Y}[n] = \E{Y[k]~B'[k-n]}$ es la correlación cruzada entre $Y[k]$ y $B'[k]$.
+
+Ahora, para minimizar el MSE se debe tomar derivadas parciales de la Ecuación~(\ref{Eq:MSE}) con respecto a todos los coeficientes del filtro, $h_n$. Entonces, para el $n$-ésimo coeficiente se tiene:
+\begin{equation}
+ \frac{\partial MSE}{\partial h_n} = -2~R_{B'Y}[n] ~+~ 2~\sum_{i=0}^{N-1} h_i~R_{B'B'}[n-i]
+\end{equation}
+en donde $n=0,1,\ldots,N-1$. Ahora, igualando a cero la expresión obtenida se obtiene un sistema de ecuaciones de $N\times N$ dado por:
+$$ \sum_{i=0}^{N-1} h_i^*~R_{B'B'}[n-i] = R_{B'Y}[n]~,$$
+que corresponde a la ecuación discreta de Wiener-Hopf y permite obtener la respuesta óptima a entrada impulso, $h_n^*$, \cite{gustafsson}.
+
+Este sistema de ecuaciones, así como su solución óptima, $\bm h^*$, se pueden plantear matricialmente como
+\begin{eqnarray}
+ \bm R_{B'B'} ~\bm h &=& \bm R_{B'Y}~,\\
+ \bm h^* &=& \bm R_{B'B'}^{-1}~\bm R_{B'Y}
+\label{Eq:LinearSystem}
+\end{eqnarray}
+en donde 
+\begin{eqnarray}
+ \bm R_{B'B'} &=& \left[\begin{array}{cccc}
+    R_{B'B'}[0] & R_{B'B'}[1] & \cdots & R_{B'B'}[N-1]\\
+    R_{B'B'}[1] & R_{B'B'}[0] & \cdots & R_{B'B'}[N-2]\\
+    R_{B'B'}[2] & R_{B'B'}[1] & \cdots & R_{B'B'}[N-3]\\
+    \vdots	& \vdots      & \ddots & \vdots\\
+    R_{B'B'}[N-1] & R_{B'B'}[N-2] &\cdots & R_{B'B'}[0]
+  \end{array}\right]~,\\
+%
+ \bm h &=& \left[h_0~~h_1~~\cdots~~h_{N-1}\right]^T~,~\mbox{y}\\
+%
+ \bm R_{B'Y} &=&\left[R_{B'Y}[0]~~R_{B'Y}[1]~~\cdots~~R_{B'Y}[N-1]\right]^T
+\end{eqnarray}
+con el superíndice $^T$ representando la traspuesta de una matriz o vector.
+
+Como punto importante de implementación, se debe tener en cuenta que la matriz de autocorrelación de la entrada auxiliar, $\bm R_{B'B'}$, corresponde a la matriz de Toeplitz del vector de autocorrelación calculado en la ventana de tiempo bajo estudio.
+
+% ***********************************************************************************
+\subsection{Implementación}
+En base a lo desarrollado en la etapa de diseño general del filtro, solo se requiere definir la entrada auxiliar $B'$ para completar el diseño del algoritmo compensador de offset.
+
+Basándose en la estacionalidad del \ac{FPN} durante períodos cortos de tiempo, se podría pensar que una buena aproximación dentro de la ventana de tiempo que se está considerando, es mantener un ruido relativamente constante en el tiempo. Para determinar la distribución espacial, se debe recurrir a las estadísticas del offset. Conforme la revisión de las fuentes de ruido en un \ac{FPA} genérico realizada en \cite{godoy-thesis}, se puede llegar a la conclusión previa de que no se pueden estimar en forma concreta las estadísticas del ruido aditivo; situación que se presenta por las múltiples fuentes del ruido, su compleja interacción y la dependencia que el \ac{FPN} tiene con las características físicas dadas al detector en el proceso de fabricación. Además, la utilización de cualquier tipo de distribución estadística implicaría la estimación adicional de la media y varianza de dicha distribución, lo que introduce aun mayor complejidad. Por el contrario, la distribución uniforme define su media y varianza de acuerdo a sus valores extremos y se podría considerar como una cota superior de la estimación dado que es bien sabido que un proceso aleatorio que sigue la distribución uniforme es el con mayor entropía desde un punto de vista de teoría de la información. Así, se asume que:
+
+\begin{description}
+ \item[A6.] Se considerará que $B'$ es un proceso aleatorio estacionario en tiempo-discreto dentro del bloque de frames considerado y que se distribuye en forma uniforme dentro de valores máximos y mínimos, en símbolos $B'\thicksim U([B'_{\min},B'_{\max}])$.
+\end{description}
+
+% Esta consideración está basada tanto en la estacionalidad del FPN durante períodos cortos de tiempo como en la revisión de las fuentes de ruido en un FPA genérico hecha previamente, en donde se concluye que no se puede estimar precisamente sus estadísticas dadas las variadas fuentes de ruido, su compleja interacción y la dependencia que el FPN tiene del detector. Entonces, la consideración de la distribución uniforme de la componente aditiva del FPN puede ser pensada como una cota superior en la estimación, pues bien es sabido que la distribución uniforme es el proceso aleatorio con mayor entropía desde un punto de vista de teoría de la información.
+
+Para la selección del rango $[B'_{\min},B'_{\max}]$ se pueden considerar dos casos: o se elige el rango dinámico que utiliza la cámara para digitalizar los valores de la irradiancia o se elige el rango dinámico en el que se mueve el bloque de imágenes que necesita ser corregido. La dependencia de este rango, así como también la veracidad de esta última consideración se estudian a continuación.
+
+
+
+% ***********************************************************************************
+\subsection{Análisis Teórico}
+Considérese que $B'$ asume un valor particular $B_0,~B_0\neq0$,  dentro del intervalo de tiempo considerado de $K$ frames, para cualquier pixel $(i,j)$ en el arreglo. En símbolos,
+$$B'~=~\left[B_0~~B_0~~\cdots~~B_0\right]_K$$
+en donde el subíndice $_K$ determina el largo del vector. Nótese que se elige $B_0\in[B'_{\min},B'_{\max}]$, sin importar el valor de los puntos extremos.
+
+En la Ecuación~(\ref{Eq:LinearSystem}), se determinó que la solución óptima está determinada por
+$$\bm h^* = \bm R_{B'B'}^{-1}~\bm R_{B'Y}~.$$
+Ahora, se analizará la influencia de utilizar $B' = B_0$ en dicha solución. Para esto, se debe recordar que la definición general de la correlación cruzada de dos señales $x$ e $y$ de largo finito $K$ está dada por la Ecuación~(\ref{Eq:CrossCorrelation}), luego
+$$R_{xy}[n]~=~\E{x[k+n]~y[k]}~=~\frac{1}{K}\sum_{k=0}^{K-1}x[k+n]y[k] ~.$$
+conforme al análisis previamente hecho, \cite{proakis-dsp}.
+
+
+% ***********************************************************************************
+\subsubsection{Matriz de Autocorrelación}
+Entonces, utilizando la definición de correlación, y asumiendo de que $B'[k>K]=0$, la función de autocorrelación $R_{B'B'}[n]$ se puede calcular mediante:
+\begin{itemize}
+\item Para $n=0$.
+$$ R_{B'B'}[0] = \frac{1}{K}\sum_{k=0}^{K-1} B'[k]B'[k] = \frac{1}{K} \left[ \underbrace{B_0^2+\dots+B_0^2}_K \right] = B_0^2$$
+%
+\item Para $n=1$.
+$$R_{B'B'}[1] = \frac{1}{K}\sum_{k=0}^{K-1} B'[k+1]B'[k] 
+= \frac{1}{K} \left[ \underbrace{B_0^2+\dots+B_0^2}_{K-1} + 0 \right]
+= \frac{K-1}{K} B_0^2$$
+%
+\item Para $n=2$.
+$$R_{B'B'}[2] = \frac{1}{K}\sum_{k=0}^{K-1} B'[k+2]B'[k]
+= \frac{1}{K} \left[ \underbrace{B_0^2+\dots+B_0^2}_{K-2} + 0 + 0\right]
+= \frac{K-2}{K}B_0^2$$
+%
+\item Para $n=n_0$.
+\begin{eqnarray}\nonumber
+ R_{B'B'}[n_0] &=& \frac{1}{K}\sum_{k=0}^{K-1} B'[k+n_0]B'[k]\\\nonumber
+&=& \frac{1}{K} \left[ \underbrace{B_0^2+\dots+B_0^2}_{K-n_0} + \underbrace{0+\dots+0}_{n_0}\right]\\
+ R_{B'B'}[n_0] &=& \frac{K-n_0}{K}B_0^2
+\label{Eq:Bp-Autocorrelation}
+\end{eqnarray}
+\end{itemize}
+
+Entonces, la función de autocorrelación $R_{B'B'}[n]$ puede ser escrita como función del $n$-ésimo lag y la realización de la señal $B'$, por lo que la matriz de autocorrelación $\M{R}_{B'B'}$ se puede expresar como:
+\begin{equation}
+ \M{R}_{B'B'}~=~\frac{B_0^2}{K} ~\M{\Psi}~,
+\end{equation}
+en donde
+\begin{equation}
+ \M{\Psi} = \left[\begin{array}{cccc}
+ K & K-1 & \cdots & K-(N-1)\\
+ K-1 & K & \cdots & K-(N-2)\\
+%  K-2 & K-1 & \cdots & K-(N-3)\\
+ \vdots & \vdots & \ddots & \vdots \\
+ K-(N-1) & K-(N-2) & \cdots & K 
+\end{array}\right]~. \label{Eq:Psi}
+\end{equation}
+
+% ***********************************************************************************
+\subsubsection{Matriz de Correlación Cruzada}
+Ahora, realizando la misma operación para la correlación cruzada $R_{B'Y}$, y nuevamente considerando que $B'[k>K]=0$, se tiene:
+\begin{itemize}
+\item Para $n=0$.
+$$R_{B'Y}[0] = \frac{1}{K}\sum_{k=0}^{K-1}B'[k]Y[k]
+= \frac{1}{K}B_0\sum_{k=0}^{K-1}Y[k]
+= B_0\bar{Y}_K$$
+
+\item Para $n=1$.
+$$R_{B'Y}[1] = \frac{1}{K}\sum_{k=0}^{K-1}B'[k+1]Y[k]
+= \frac{1}{K}B_0\sum_{k=0}^{K-2}Y[k]
+= B_0 \frac{K-1}{K} \bar{Y}_{K-1}$$
+
+\item Para $n=2$.
+$$R_{B'Y}[2] = \frac{1}{K}\sum_{k=0}^{K-1}B'[k+2]Y[k]
+= \frac{1}{K}B_0\sum_{k=0}^{K-3}Y[k]
+= B_0 \frac{K-2}{K} \bar{Y}_{K-2}$$
+
+\item Para $n=n_0$.
+$$R_{B'Y}[n_0] = \frac{1}{K}\sum_{k=0}^{K-1}B'[k+n_0]Y[k]
+= \frac{1}{K}B_0\sum_{k=0}^{K-n_0-1}Y[k]
+= B_0 \frac{K-n_0}{K} \bar{Y}_{K-n_0}$$
+\end{itemize}
+
+\vspace{0.5cm}
+Luego el vector $\bm{R}_{B'Y}$ se puede escribir como
+\begin{equation}
+ \bm{R}_{B'Y}=\left[\begin{array}{c}
+ B_0\bar{Y}_{K}\\
+ \frac{K-1}{K}B_0\bar{Y}_{K-1}\\
+ \frac{K-2}{K}B_0\bar{Y}_{K-2}\\\vdots\\
+ \frac{K-(N-1)}{K}B_0\bar{Y}_{K-(N-1)}\end{array}\right]
+%
+ = \frac{B_0}{K}~\bm{\psi}~,
+\end{equation}
+en donde
+\begin{equation}
+ \bm{\psi} = \left[\begin{array}{c}
+ K\bar{Y}_{K}\\
+ (K-1)\bar{Y}_{K-1}\\
+ (K-2)\bar{Y}_{K-2}\\\vdots\\
+ (K-(N-1))\bar{Y}_{K-(N-1)}\end{array}\right]~. \label{Eq:psi}
+\end{equation}
+
+
+% ***********************************************************************************
+\subsubsection{Salida del Sistema}
+Ahora bien, basándose en la Ecuación (\ref{Eq:LinearSystem}) los coeficientes óptimos estarán dados por:
+\begin{eqnarray}
+ \nonumber \bm h^* &=& \bm{R}_{B'B'}^{-1} ~ \bm{R}_{B'Y}\\
+ \nonumber &=&\left(\frac{B_0^2}{K}~\bm{\Psi}\right)^{-1}\left(\frac{B_0}{K}~\bm{\psi}\right)\\
+ \therefore~~\bm h^* &=& \frac{1}{B_0}~\bm{\Psi}^{-1}~\bm{\psi}~,
+\end{eqnarray}
+en donde $\bm{\Psi}$ y $\bm{\psi}$ se definieron previamente en las Ecuaciones~(\ref{Eq:Psi}) y (\ref{Eq:psi}) respectivamente.
+
+Reemplazando la expresión de los coeficientes del filtro, $\bm h^*$, en la expresión del error de salida, $e[k]$, se tiene:
+\begin{eqnarray*}
+ e[k]=\hat{S}[k] &=& Y[k]~-~\bm{h}^*\ast B'[k] \\
+&=& Y[k] ~-~ \sum_{i=0}^{N-1}h_i B'[k-i]\\
+% &=& Y[k] ~-~ B_0\sum_{i=0}^{N-1}h_i\\
+&=& Y[k] ~-~ B_0 ~\bm h^{*^T} \cdot\bm1_N\\
+&=&Y[k] ~-~ B_0 \bm ~\left(\frac{1}{B_0}~\bm{\Psi}^{-1}~\bm{\psi}\right)^T \cdot\bm1_N~,
+\end{eqnarray*}
+es decir
+\begin{equation}
+ \hat{S}[k] = Y[k] ~-~ \left(\bm{\Psi}^{-1}~\bm{\psi}\right) ^T\cdot\bm1_N~,
+\end{equation}
+en donde $\bm1_N$ es un vector columna de largo $N$ y valor unitario. En resumen, el filtro diseñado, genera una estimación del offset dada por
+\begin{equation}
+ \hat{B} = \left(\bm{\Psi}^{-1}~\bm{\psi}\right) ^T\cdot\bm1_N~,
+\end{equation}
+en donde resulta de gran interés notar que la estimación del offset al tener un filtro fijo no depende del valor que se elija en la entrada auxiliar del esquema \ac{NC}.
+
+Analizando ahora que sucede para distinto número de coeficientes, se tiene:
+\begin{itemize}
+\item Para un coeficiente del filtro, $N=1$, se tiene que $\bm{\Psi}^{-1}=\frac{1}{K}$ y $\bm{\psi}=K\bar{Y}_{K}$ por lo tanto. 
+$$\hat{B} = \left(\frac{1}{K} ~ K\bar{Y}_{K}\right)^T~ 1 = \bar{Y}_{K}~.$$
+Esto implica que el offset corresponde a la media temporal de la señal de read-out. Entonces, la metodología planteada con el método de \ac{NC} utilizando un coeficiente en el filtro, equivale al desarrollo del algoritmo de estadísticas constantes desarrollado por Narendra y Harris, \cite{narendra81,harris-cs,harris97analog}, pero compensando solamente el offset.
+
+\item Para $N=2$, se tiene que matriz de autocorrelación y su inversa están determinadas por
+$$\bm{\Psi} = \left[\begin{array}{cc}K & K-1\\K-1 & K\end{array}\right]\rightarrow \bm{\Psi}^{-1} = \frac{1}{2K-1} \left[\begin{array}{cc} K & 1-K\\1-K & K \end{array}\right]~,$$
+y el vector de correlación
+$$\bm{\psi} = \left[K\bar{Y}_{K}~~(K-1)\bar{Y}_{K-1}\right]^T~.$$
+Luego de cierto trabajo algebraico, la estimación del offset queda definido por
+$$\hat{B} = \frac{1}{2K-1}\left[\bar{Y}_{K} ~+~ (K-1)\bar{Y}_{K-1}\right]~.$$
+
+\item Para $N=3$, se tiene la matriz de correlación
+$$\bm{\Psi} = \left[\begin{array}{ccc}K & K-1 & K-2\\K-1 & K & K-1\\K-2 & K-1 & K\end{array}\right]~,$$
+por lo que su inversa es
+$$\bm{\Psi}^{-1} = \frac{1}{4K-4}\left[\begin{array}{ccc}2K-1 & 2(1-K) & 1\\2(1-K) & 4(K-1) & 2(1-K)\\1 & 2(1-K) & 2K-1\end{array}\right]~,$$
+y el vector de correlación es
+$$\bm{\psi} = \left[K\bar{Y}_{K}~~(K-1)\bar{Y}_{K-1}~~(K-2)\bar{Y}_{K-2}\right]^T~.$$
+Nuevamente, luego de cierto trabajo algebraico se tiene que la estimación del offset para tres coeficientes es
+$$\hat{B} = \frac{1}{2K-2}\left[K\bar{Y}_{K}~+~(K-2)\bar{Y}_{K-2}\right]~.$$
+
+\item De forma similar, se tiene un offset estimado determinado por
+$$\hat{B} = \frac{1}{2K-3}\left[K\bar{Y}_{K}~+~(K-3)\bar{Y}_{K-3}\right]~,$$
+al trabajar con $N=4$ coeficientes en el filtro.
+
+\item Para $N=5$, se tiene
+$$\hat{B} = \frac{1}{2K-4}\left[K\bar{Y}_{K}~+~(K-4)\bar{Y}_{K-4}\right]~.$$
+\end{itemize}
+
+Generalizando la expresión, se obtiene que la estimación del offset utilizando un filtro \ac{FIR} con $N$ taps en una ventana de $K$ frames, está determinado por la expresión:
+\begin{equation}
+ \hat{B} = \frac{1}{2K-(N-1)}\left[K\bar{Y}_{K} ~+~ (K-(N-1))\bar{Y}_{K-(N-1)}\right]~.
+\label{Eq:BhatFixed}
+\end{equation}
+
+Cabe destacar que se ha considerado procesamiento pixel-a-píxel, por lo que la Ecuación~(\ref{Eq:BhatFixed}) corresponde a la estimación del offset en un pixel particular que estará determinado por la entrada al sistema de cancelación de ruido, $Y[k]$.
+
+% ***********************************************************************************
+\subsection{Versión Recursiva}
+En particular, al trabajar con los resultados anteriores, se tiene el problema de que se requiere un buffer de $K=K_{opt}$ frames para realizar los cálculos de funciones de correlación, en donde $K_{opt}$ es el valor del tamaño de la ventana óptimo que logra minimizar el error cuadrático medio en la salida. Esto, evidentemente, es algo que no se desea en implementaciones reales, ya que requerirá su propio hardware y energía adicional dentro de cada una de las cámaras. Por esta razón, se evalúa la idea de encontrar una versión recursiva de la Ecuación~(\ref{Eq:BhatFixed}). 
+
+Para ello, se tiene que tener en mente que el offset estimado está determinado por 
+$$\hat{B} = \frac{1}{2K-(N-1)}\left[ \sum_{i=0}^{K-1}Y[i] + \sum_{i=0}^{K-N}Y[i] \right]~,$$
+conforme a la Ecuación~(\ref{Eq:BhatFixed}) y a la definición de las medias ponderadas que se dieron en el análisis del filtro.
+
+Entonces, se puede seguir el siguiente razonamiento. Considérese una ventana fija de tiempo de $K$ frames y un filtro fijo de $N$ taps. 
+
+\begin{itemize}
+\item Para un instante de tiempo $k=0$, el offset se calculará como
+$$\hat{B}_0 = \frac{1}{2K-(N-1)}\left[Y[0] + Y[0]\right] = \frac{2}{2K-(N-1)}Y[0]~.$$
+
+\item Para un instante de tiempo $k=1$, el offset se calculará como
+\begin{eqnarray*}
+ \hat{B}_1 &=& \frac{1}{2K-(N-1)}\left[\left(Y[0] + Y[1]\right)  + \left(Y[0] + Y[1]\right)\right]\\
+	&=& \hat{B}_0 + \frac{2}{2K-(N-1)}Y[1]
+\end{eqnarray*}
+
+\item Para un instante de tiempo $k=2$, el offset se calculará como
+\begin{eqnarray*}
+ \hat{B}_2 &=& \frac{1}{2K-(N-1)}\left[\left(Y[0] + Y[1] + Y[2]\right)  + \left(Y[0] + Y[1] + Y[2]\right)\right]\\
+	&=& \hat{B}_1 + \frac{2}{2K-(N-1)}Y[2]
+\end{eqnarray*}
+
+\item Generalizando, para un instante de tiempo $k=k_0$, con $k_0\leq K-N$ el offset se calculará como
+\begin{equation}
+ \hat{B}_{k_0} =  \hat{B}_{k_0-1} + \frac{2}{2K-(N-1)}Y[k_0]
+\label{Eq:BhatRecursive}
+\end{equation}
+\end{itemize}
+Ahora bien, para el caso en que $k > K-N$ el factor que multiplica la nueva entrada $Y[k]$ se verá reducido a la mitad pues desaparecerá la segunda sumatoria de la estimación del offset. Sin embargo, se puede considerar que $K>>N$, por lo que $K-N\approx K$. Esta aproximación permite concluir de que la Ecuación~(\ref{Eq:BhatRecursive}) es un caso generalizado de estimación recursiva del offset al trabajar con un filtro fijo.
+
+Por lo tanto, durante un bloque de $K_{opt}$ frames se realiza la estimación para el siguiente bloque, pero la corrección se puede implementar en forma previa para el bloque actual usando esta nueva aproximación frame-por-frame. Además, esto implica que en términos de implementación en hardware, solamente se requiere un buffer sobre el cual se va actualizando el cálculo de la media. En resumen, el algoritmo planteado no solo es una buena solución, sino que representa una alternativa válida a ser implementada.
+% 
+% % ***********************************************************************************
+% % ***********************************************************************************
+% \section{Cancelación de Ganancia usando NC}
+% Utilizando la salida del esquema que cancela el offset, se plantea como segunda etapa la corrección de la ganancia con una idea similar. Ahora, la entrada al sistema estará determinada por la relación $e[k]\approx S[k] = A~X[k]$, lo que implica que, para aplicar el método de \ac{NC} se deberá aplicar la función logaritmo sobre dicha salida. Permítase definir entonces $S_2[k] = \log(S[k])$, $A_2 = \log(A)$ y $X_2[k] = \log(X[k])$. La salida de la primera etapa será entonces
+% $$S_2[k] = A_2 + X_2[k]~.$$
+% 
+% En base a lo anterior, la solución completa para solucionar el problema de \ac{NU} se presenta en la Fig.~\ref{Fig:NC-Full}, en donde la linea segmentada representa el compensador de offset diseñado en la sección anterior. Se puede observar que la salida de esta primera etapa alimenta la entrada primaria de la segunda luego de pasar por el bloque que representa la aplicación de la función logaritmo. En la segunda etapa, el compensador de ganancia, $H'(z)$, producirá una estimación del logaritmo de la ganancia que se restará al logaritmo de la entrada. Finalmente, luego de aplicar la función exponencial a la estimación, se obtiene la señal filtrada tanto en offset como en ganancia.
+% 
+% \begin{figure}[tb]
+%  \centering
+%  \includegraphics[scale=0.7]{Figures/BlockDiagramFull}
+%  \caption{Diagrama de Bloques de NC para NUC.}
+%  \label{Fig:NC-Full}
+% \end{figure}
+% 
+% % ***********************************************************************************
+% \subsection{Diseño del Filtro}
+% Tomando las mismas consideraciones que se usaron para el diseño del compensador de offset, la salida del compensador de ganancia estará determinado por $e_A[k]\approx X_2[k] = \log(X[k])$, como se puede notar en la Fig.~\ref{Fig:NC-Full}. Para este caso, se dirá que el filtro FIR, $H'(z)$, posee $M$ coeficientes, que se denotarán por $h_n'$, con $n = 0,\dots,M-1$ y que se calculan usando el mismo procedimiento anterior, luego la solución óptima $\bm h'^*$ estará determinada por
+% \begin{equation}
+%  \bm h'^* = \bm R_{A_2'A_2'}^{-1}~\bm R_{A_2'S_2}
+% \end{equation}
+% en donde $A_2' = \log(A')$ y las matrices $\bm R_{A_2'A_2'}$ y $\bm R_{A_2'S_2}$ representan las secuencias de autocorrelación de $A_2'$ y de correlación cruzada entre $A_2'$ y $S_2$ respectivamete, y
+% \begin{eqnarray}
+%  \bm R_{A_2'A_2'} &=& \left[\begin{array}{cccc}
+%     R_{A_2'A_2'}[0] & R_{A_2'A_2'}[1] & \cdots & R_{A_2'A_2'}[M-1]\\
+%     R_{A_2'A_2'}[1] & R_{A_2'A_2'}[0] & \cdots & R_{A_2'A_2'}[M-2]\\
+%     R_{A_2'A_2'}[2] & R_{A_2'A_2'}[1] & \cdots & R_{A_2'A_2'}[M-3]\\
+%     \vdots	& \vdots      & \ddots & \vdots\\
+%     R_{A_2'A_2'}[M-1] & R_{A_2'A_2'}[M-2] &\cdots & R_{A_2'A_2'}[0]
+%   \end{array}\right]~,\\
+% %
+%  \bm h'^* &=& \left[h_0'~~h_1'~~\cdots~~h_{M-1}'\right]^T~,~\mbox{y}\\
+% %
+%  \bm R_{A_2'S_2} &=& \left[R_{A_2'S_2}[0]~~R_{A_2'S_2}[1]~~\cdots~~R_{A_2'S_2}[M-1]\right]^T
+% \end{eqnarray}
+% con el superíndice $^T$ representando la traspuesta de una matriz o vector, y $M$ es el orden del filtro LTI FIR diseñado para el compensador de ganancia.
+% 
+% Nuevamente, se debe tener en consideración que la matriz de autocorrelación de la entrada auxiliar, $\bm R_{A_2'A_2'}$, corresponde a la matriz de Toeplitz del vector de autocorrelación calculado en la ventana de tiempo bajo estudio.
+% 
+% 
+% % ***********************************************************************************
+% \subsection{Implementación}
+% Para completar el diseño completo del sistema de \ac{NUC} solo se requiere definir la entrada auxiliar $A'$. Al igual que para el caso del compensador de offset, se considerará que $A'$ es un proceso aleatorio estacionario que sigue una distribución uniforme continua en un rango $[A'_{\min},A'_{\max}]$, sin embargo existen algunas diferencias de implementación con el compensador de offset. De acuerdo con resultados anteriores, la nouniformidad multiplicativa se encuentra en las vecindades de uno, \cite{vera-masterthesis,reeves-thesis,torres-phdthesis}. Esto se complementa por la Fig.~\ref{Fig:AmberGainTPC-hist}, en donde todos los valores se concentran en el intervalo $[0.95,1.05]$. Entonces, se agrega la siguiente consideración para el algoritmo,
+% 
+% \begin{description}
+%  \item[A7.] Se considerará que $A'$ es un proceso aleatorio estacionario dentro del bloque de frames considerado y que se distribuye en forma uniforme dentro de valores máximos y mínimos, en símbolos $A'\thicksim U([0.95,1.05])$.
+% \end{description}
+% 
+% Nótese de que la primera etapa puede generar valores menores que cero, por lo que se requiere hacer algún tipo de corrimiento y/o reescalamiento de los datos para poder aplicar la función logaritmo.
+% 
+% % ***********************************************************************************
+% \subsection{Análisis Teórico}
+% Dado que el esquema de corrección es exactamente el mismo que para el compensador de offset, pero con diferentes variables se puede realizar el mismo estudio en base a considerar un valor fijo dentro de la ventana de $K$ frames.
+% 
+% Para la matriz de autocorrelación, $\bm R_{A_2'A_2'}$, se reemplaza $B' = A_2'$ en la Ecuación (\ref{Eq:Bp-Autocorrelation}), y se considera que la entrada auxiliar $A'$ asume un valor $A_0$, luego $A_2' = \log(A_0)$ y
+% $$ R_{A_2'A_2'}[n_0] = \frac{K-n_0}{K}[\log(A_0)]^2~.$$
+% Ahora, para el caso de la secuencia de correlación cruzada, se debe hacer además $Y = S_2$, entonces
+% $$R_{A_2'S_2}[n_0] = \frac{K-n_0}{K}\log(A_0)\bar{S}_{2_{K-n_0}}~.$$
+% 
+% Luego, por analogía se tiene que
+% \begin{eqnarray}\nonumber
+% \bm R_{A_2'A_2'} &=& \frac{[\log(A_0)]^2}{K} \left[\begin{array}{cccc}
+%  K & K-1 & \cdots & K-(M-1)\\
+%  K-1 & K & \cdots & K-(M-2)\\
+% %  K-2 & K-1 & \cdots & K-(N-3)\\
+%  \vdots & \vdots & \ddots & \vdots \\
+%  K-(M-1) & K-(M-2) & \cdots & K 
+% \end{array}\right]\\
+% &=& \frac{[\log(A_0)]^2}{K} \bm\Psi_2 \label{Eq:Psi2}
+% \end{eqnarray}
+% y que
+% \begin{eqnarray}\nonumber
+% \bm R_{A_2'S_2} &=& \frac{\log(A_0)}{K} \left[\begin{array}{c}
+%  K\bar{S}_{2_{K}}\\
+%  (K-1)\bar{S}_{2_{K-1}}\\
+%  (K-2)\bar{S}_{2_{K-2}}\\\vdots\\
+%  (K-(N-1))\bar{S}_{2_{K-(M-1)}}\end{array}\right]\\
+% &=& \frac{[\log(A_0)]^2}{K} \bm\psi_2 \label{Eq:psi2}
+% \end{eqnarray}
+% en donde $M$ es el orden del filtro LTI FIR diseñado para el compensador de ganancia.
+% 
+% Los coeficientes del filtro serán
+% $$\bm h'^* = \bm R_{A_2'A_2'}^{-1}\bm R_{A_2'S_2} = \frac{1}{\log(A_0)}\bm\Psi_2^{-1}\bm\psi_2~,$$
+% en donde $\Psi_2$ y $\psi_2$ están definidas en las Ecuaciones~(\ref{Eq:Psi2})  y (\ref{Eq:psi2}) respectivamente.
+% 
+% Ahora, la ganancia estimada mediante el análisis estará determinada por
+% \begin{eqnarray}\nonumber
+%  \hat{A}_2 &=& \bm h'^*A_2'[k] = \sum_{i=0}^{M-1} h_i' A_2'[k-i]\\\nonumber
+%  &=& \log(A_0) \bm h'^{*^T} \bm1_M\\\nonumber
+%  &=& \log(A_0)\left(\frac{1}{\log(A_0)}\bm\Psi_2^{-1}\bm\psi_2\right)^T\bm1_M \\\nonumber
+%  &=& \left(\bm\Psi_2^{-1}\bm\psi_2\right)^T\bm1_M
+% \end{eqnarray}
+% 
+% Nuevamente, considerando la analogía entre ambos compensadores, se puede decir que desarrollando para diferentes coeficientes del filtro $H'(z)$, se logra encontrar la expresión de error dada por
+% \begin{equation}
+%  \hat{A}_2 = \frac{1}{2K-(M-1)} \left[K\bar{S}_{2_{K}} ~+~ (K-(M-1))\bar{S}_{2_{K-(M-1)}}\right]~, \label{Eq:AhatFixed}
+% \end{equation}
+% cuya versión recursiva se puede obtener de manera similar:
+% \begin{equation}
+%  \hat{A}_{2_{k_0}} = \hat{A}_{2_{k_0-1}} + \frac{2}{2K-(M-1)}S_2[k_0]
+% \label{Eq:BhatRecursive}
+% \end{equation}
+% 
+% 
+% % % ***********************************************************************************
+% % % ***********************************************************************************
+% % \section{Cancelación de Offset con Filtro Adaptivo}
+% % Se pretende evaluar los resultados de aplicar un esquema adaptivo en la estimación del ruido aditivo. El esquema adaptivo buscar actualizar los valores de los coeficientes del filtro conforme se requiere en el esquema. Con esto, no se necesitan hacer suposiciones externas como la distribución estadística del ruido correlacionado, $B'$, ya que con el paso de los frames el filtro encontrará la forma de minimizar el error en la salida del esquema \ac{NC}.
+% % 
+% % Considérese un filtro de $N$ coeficientes denominados por $h_n$, con $n=0,1,2,\dots,N-1$. La salida del filtro, $G[k]$, está determinada por la convolución discreta entre la entrada, $B'[k]$, y dichos coeficientes. En símbolos, $G[k] = h_n\ast B'[k]$. Entonces, el error a la salida del \ac{NC}, será $e[k] = Y[k] - G[k]$.
+% % 
+% % En particular se trabaja con dos algoritmos de diseño: LMS y RLS que se presentan a continuación.
+% % 
+% % % ***********************************************************************************
+% % \subsection{Algoritmo LMS}
+% % El algoritmo \ac{LMS} utiliza el principio de minimalización del error cuadrático medio para actualizar los coeficientes del filtro. La actualización, conforme al planteamiento del algoritmo, se realiza mediante
+% % \begin{equation}
+% %  \bm h^{(k+1)} = \bm h^{(k)} + \mu ~e[k]\ast B'[k]
+% % \end{equation}
+% % en donde el vector $\bm h = [h_0~h_1~\cdots~h_{N-1}]^T$ y 
+% % $$e[k]\ast B'[k] = e[k]\left[ \begin{array}{c}B'[k]\\B'[k-1]\\\vdots\\B'[k-(N-1)]\end{array}\right]~.$$
+% % 
+% % 
+% % 
+% % % ***********************************************************************************
+% % \subsection{Algoritmo RLS}
+% % De define la matriz de covarianza $\bm P^{(k=0)} = \sigma^2 \bm I_N$, en donde $\bm I_N$ representa la matriz identidad de orden $N$ y $\sigma$ es un número grande, del orden de $10^3~K$. La actualización, conforme al planteamiento del algoritmo, se realiza mediante
+% % 
+% % \begin{eqnarray*}
+% %  \bm K^{(k)} &=& \bm P^{(k-1)} **\\
+% %  \gamma^{(k)} &=& 1 + \bm K^{(k)} **\\
+% %  \bm h^{(k)} &=& \bm h^{(k-1)} + \bm K^{(k)} \frac{e[k]}{\gamma^{(k)}}\\
+% %  \bm P^{(k)} &=& \bm P^{(k-1)} - \frac{\bm K^{(k)}~\bm K^{(k)^T}}{\gamma^{(k)}}
+% % \end{eqnarray*}
+% % 
+% % 

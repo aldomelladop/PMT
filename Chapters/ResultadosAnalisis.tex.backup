@@ -1,0 +1,186 @@
+\chapter{Resultados y Análisis}
+
+% ***********************************************************************************
+\section{Introducción}
+En el presente capítulo, se muestran los resultados de la aplicación del método diseñado sobre experimentos con datos simulados y reales. Al hablar de experimentos simulados, se hace referencia a que se toma una secuencia corregida mediante \ac{TPC} de laboratorio y se perturba con información conocida, con el fin de evaluar el desempeño del algoritmo y fijar los parámetros para aplicar el esquema sobre datos reales.
+
+% ***********************************************************************************
+% ***********************************************************************************
+\section{Aplicación sobre datos simulados}
+Para generar un offset sobre datos corregidos mediante \ac{TPC}, se utiliza el modelo de Gauss-Markov que ha sido previamente estudiado al ser aplicado como modelo de observación en implementaciones del Filtro Kalman, \cite{pezoa-masterthesis,torres-phdthesis}. Entonces, el modelo que se plantea para el offset será
+$$B[k] = \alpha B[k-1] + \beta W[k-1]~ ,$$
+en donde $\alpha$ y $\beta$ son parámetros a definir y $W[k-1]$ es un proceso Gaussiano de ruido blanco con media nula. Dado que las variaciones frame-a-frame del offset son muy pequeñas, el parámetro $\alpha$ deberá ser muy cercano a uno. En particular se ha fijado en $\alpha=0.99$, por lo que se tendrán variaciones temporales de un 1\%. En cierta forma, el parámetro $\beta$ representa la ponderación de ruido temporal en el offset del sistema simulado. Considerando que en la literatura se ha concluido que dicha ponderación es baja al momento de realizar la estimación del \ac{FPN}, entonces se fija el parámetro en $\beta=0.1$ \cite{jara-thesis,reeves-thesis}. El valor inicial $B[0]$ se obtiene conforme a las consideraciones dadas al momento de aplicar el \ac{NC} al problema de \ac{NUC} por lo que espacialmente seguirá una distribución uniforme entre valores máximos y mínimos. La elección de estos valores se realizó conforme a la Fig.~\ref{Fig:AmberOffsetTPC-hist} que determina la desviación estandar y la media espacial de los datos.
+
+Los datos corregidos con cuerpos negros se corrompen con distintos niveles de offset simulado. Estos niveles se especifican en porcentajes de la desviación estándar de los datos calibrados. En particular, se ha trabajado con 1,10,20,30,50 y 100\% de offset simulado.
+
+% ***********************************************************************************
+\subsection{Influencia del Tamaño del Bloque en el Desempeño}
+Para probar la influencia del tamaño del bloque en el desempeño del algoritmo, se utiliza un filtro de orden conocido y fijo $N=10$, y se modifica el tamaño del bloque, $K$, entre 400 y 1500 frames con incrementos de 100. En símbolos $K\in\{400,500,600,\dots,1500\}$. Además, se agregaron distintos niveles de offset, con el fin de estudiar en forma simultánea la capacidad de corrección del algoritmo. Téngase en mente de que solo se utiliza la cámara Amber pues existen datos de cuerpo negro que permiten contrastar mediante RMSE.
+
+En la Tabla~\ref{Tb:RMSEAmber} se muestran los resultados al realizar dicho estudio. Los valores presentados están \textit{en por unidad}, ponderados sobre el largo de le ventana, $K$, para facilitar la comprensión del lector al no necesitar referencias. Es en verdad muy interesante notar de que el mínimo se logra al utilizar un bloque de 1300 frames, sin embargo la corrección no resulta ser óptima para bajos niveles de no-uniformidad. Esto tiene una explicación bastante sencilla, y se debe a que como los niveles de ruido son tan bajos, el RMSE con respecto a la señal no corrupta es practicamente nulo; luego al realizar todo el procesamiento estadístico se está inyectando cierto nivel de ruido propio del cálculo numérico y procesamiento estadístico.
+
+\begin{table}[tbp]
+ \centering
+ \caption{RMSE para distintos tamaños de bloques cámara Amber}
+ \label{Tb:RMSEAmber}
+ \begin{tabular}{|c|c|cccccc|}
+\hline
+ \textbf{\%} & \textbf{RMSE $Y[k]$} & \multicolumn{6}{c|}{\textbf{RMSE Noise Cancellation}}\\
+  & & \textbf{K=900} & \textbf{K=1000} & \textbf{K=1100} & \textbf{K=1200} & \textbf{K=1300} & \textbf{K=1400}\\\hline
+ 1\%	& 0.0017 & 0.0763 & 0.0729 & 0.0746 & 0.0669 & 0.0653 & 0.0676\\
+ 10\% 	& 0.0201 & 0.0776 & 0.0742 & 0.0759 & 0.0684 & 0.0669 & 0.0692\\
+ 20\% 	& 0.0438 & 0.0807 & 0.0779 & 0.0793 & 0.0724 & 0.0710 & 0.0733\\
+ 30\% 	& 0.0683 & 0.0855 & 0.0827 & 0.0844 & 0.0782 & 0.0771 & 0.0792\\
+ 50\% 	& 0.1097 & 0.0975 & 0.0952 & 0.0970 & 0.0924 & 0.0915 & 0.0934\\
+ 100\% 	& 0.1773 & 0.1282 & 0.1273 & 0.1296 & 0.1267 & 0.1266 & 0.1290\\\hline
+\end{tabular}
+\end{table}
+
+Los resultados antes expuestos se corroboran al realizar una gráfica del RMSE medio, medido a lo largo del tiempo y sobre todos los píxeles, con respecto al tamaño del bloque como se muestra en la Fig.~\ref{Fig:BiasSimulatedVsBlockSize}. Para esto, se consideró que $N=10$ y se tomó un 50\% de contaminación de offset como referencia, dado que por la Tabla~\ref{Tb:RMSEAmber}, este valor arroja buenos resultados de corrección. Es importante notar que efectivamente el mínimo se alcanza en $K=1300$ frames por bloque. Como los datos han sido capturados a una tasa de 30 fps, al hablar de 1300 frames se requerien aproximadamente unos 40 segundos para lograr una imagen corregida en forma completa, sin embargo se puede observar en la misma Figura que sobre los 900 frames se tendrá una imagen corregida con niveles bastante aceptables y similares a los logrados con el total de frames.
+
+% ***********************************************************************************
+\subsection{Influencia del Número de Taps en el Desempeño}
+Hasta ahora, se consideró que $N=10$ era una buena referencia, sin embargo esto se debe comprobar mediante algún experimento.
+
+En la Fig.~\ref{Fig:BiasSimulatedVsTaps} se muestra que el RMSE es insensible a la variación del número de taps del filtro entre 1 y 10; en símbolos $N\in\{1,2,\dots,10\}$. Este resultado corrobora que la referencia previamente utilizada de $N=10$ ha sido una buena elección, sin embargo se pudo haber trabajado con cualquier número de taps en este intervalo.
+
+\begin{figure}[tb]
+ \centering
+ \subfigure[RMSE medio vs. Tamaño del Bloque]{\includegraphics[scale=0.4]{Figures/BiasSimulatedVsBlockSizeBW}\label{Fig:BiasSimulatedVsBlockSize}}
+\subfigure[RMSE medio vs. Número de Taps]{\includegraphics[scale=0.4]{Figures/BiasSimulatedVsTapsBW}\label{Fig:BiasSimulatedVsTaps}}
+ \caption[RMSE medio por pixel]{RMSE medio por pixel como función del número de frames en cada bloque y del número de taps del filtro.}
+ \label{Fig:ContrastacionRMSE}
+\end{figure}
+
+En resumen, desde ahora en adelante se considerará que los parámetros que logran resultados óptimos son $K=1300$ y $N=10$ para la cámara Amber. Lamentablemente no se dispone de datos corregidos en laboratorio de la cámara Merlin por lo que no se pueden hacer estudios particulares para encontrar los parámetros óptimos de corrección que particularmente tiene esta cámara.
+
+% % ***********************************************************************************
+% \section{Resultados sobre Imágenes con NU Simulada}
+% Conforme a lo obtenido en la Tabla~\ref{Tb:RMSEAmber}, se trabajará con una perturbación de un 50\% y 100\% de offset simulado. El resultado de aplicar dicha perturbación se muestra en las figuras \ref{Fig:AmberYsim50p} y \ref{Fig:AmberYsim100p} respectivamente.
+% 
+% \begin{figure}[tb]
+%  \centering
+%  \subfigure[Imágen Original] {\includegraphics[scale=0.4]{Figures/AmberTPC}}\label{Fig:AmberCorr}
+%  \subfigure[Imágen con 50\%] {\includegraphics[scale=0.4]{Figures/AmberYsim50p}}\label{Fig:AmberYsim50p}
+%  \subfigure[Imágen con 100\%] {\includegraphics[scale=0.4]{Figures/AmberYsim100p}}\label{Fig:AmberYsim100p}
+%  \caption{Simulación de NU para cámara amber}
+% \end{figure}
+% 
+% Al aplicar los parámetros óptimos para la corrección de secuencias de imágene, sobre los datos simulados se obtienen los 
+
+% ***********************************************************************************
+% ***********************************************************************************
+\section{Aplicación sobre datos reales}
+Para evaluar el desempeño del algoritmo frente a datos \ac{IR} con \ac{NU} aditiva real, se realizan pruebas que permitan visualizar la influencia de modificar el tamaño del bloque de frames en el cálculo de la versión estimada de la irradiancia de entrada. La justificación de realizar dicho estudio es porque las métricas de evaluacion no siempre representan lo que se obtiene a la salida, siendo la evaluación al ojo desnudo la que permite discriminar entre una buena y una mala corrección. No se realizan estudios de comparación al variar el número de taps del filtro, pues como se vió anteriormente no tiene influencia sobre la estimación.
+
+% Posterior a dicha evaluación, se realizan comparaciones con los métodos que anteriormente se nombraro, como por ejemplo uego en base al �ptimo previamente encontrado, se realizan comparaciones con el m�todo rango constante (CR) planteado en \cite{reeves-thesis}. Para realizar dicha comparaci�n se utilizar� el coeficiente de rugosidad $\rho$ como par�metro de comparaci�n, ya que el MSE no tiene sentido al comparar cuadros corregidos sin tener un patr�n de referencia dado por TPC para todas las c�maras. Para esta secci�n se utilizar�n adem�s datos IR de la c�mara CEDIP  que al igual que para el caso de la c�mara MERLIN, se ha redefinido el tama�o de los cuadros a 128$\times$128, para as� minimizar el tiempo de simulaci�n sin alterar los resultados.
+
+
+Para reflejar visualmente los resultados de las variaciones de $K$, este se va modificando gradualmente $K\in\{100,500,1000,1300\}$, luego se determina el coeficiente de rugosidad, $\rho$, de cada uno de ellos, con el fin de comparar el método con su símil \ac{CS}. Este experimento se realiza tanto para la cámara Amber como para la cámara Merlin, mostrando el resultado en dos frames distintos.
+
+% Cabe destacar que los datos utilizados en la presente sección presentan tanto \ac{NU} aditiva como multiplicativa (offset y ganancia, respectivamente). Sin embargo, en la presente solución sólo se realiza la estimación del offset
+
+
+% ***********************************************************************************
+\subsection{Influencia del Tamaño del Bloque para Cámara Amber}
+A pesar de que se ha considerado esta cámara para calcular el RMSE en base a sus datos de calibración de cuerpo negro, también resulta de interés ver su comportamiento al aplicar el esquema de \ac{NC} sobre datos reales.
+
+En las Figuras \ref{Fig:AmberF120}, y \ref{Fig:AmberF1200} se muestran los frames 120 y 1200 respectivamente, realizando la variación del tamaño del bloque de cálculo de acuerdo a lo descrito anteriormente. Se ha incluido el mismo frame corregido en ganancia y offset con el método de \ac{TPC} como comparación visual de los resultados.
+
+\begin{figure}[tbp]
+ \centering
+ \subfigure[Frame Corrupto] {\includegraphics[scale=0.5]{Figures/AmberUnc0}}\label{Fig:AmberUnc0}
+ \subfigure[Frame Original] {\includegraphics[scale=0.5]{Figures/AmberCorr0}}\label{Fig:AmberCorr0}\\
+ \subfigure[K=100] {\includegraphics[scale=0.5]{Figures/AmberF120-B0100}}\label{Fig:F120B100}
+ \subfigure[K=500] {\includegraphics[scale=0.5]{Figures/AmberF120-B0500}}\label{Fig:F120B500}\\
+ \subfigure[K=1000] {\includegraphics[scale=0.5]{Figures/AmberF120-B1000}}\label{Fig:F120B1000}
+ \subfigure[K=1300] {\includegraphics[scale=0.5]{Figures/AmberF120-B1300}}\label{Fig:F120B1300}\\
+ \caption[Influencia tamaño bloque cámara Amber]{Influencia del tamaño del bloque en cámara Amber para un frame cualquiera}
+ \label{Fig:AmberF120}
+\end{figure}
+
+
+\begin{figure}[tbp]
+ \centering
+ \subfigure[Frame Corrupto] {\includegraphics[scale=0.5]{Figures/AmberUnc}}\label{Fig:AmberUncc}
+ \subfigure[Frame Original] {\includegraphics[scale=0.5]{Figures/AmberTPC}}\label{Fig:AmberCorr}\\
+ \subfigure[K=100] {\includegraphics[scale=0.5]{Figures/AmberF1200-B0100}}\label{Fig:F1200B100}
+ \subfigure[K=500] {\includegraphics[scale=0.5]{Figures/AmberF1200-B0500}}\label{Fig:F1200B500}\\
+ \subfigure[K=1000] {\includegraphics[scale=0.5]{Figures/AmberF1200-B1000}}\label{Fig:F1200B1000}
+ \subfigure[K=1300] {\includegraphics[scale=0.5]{Figures/AmberF1200-B1300}}\label{Fig:F1200B1300}\\
+ \caption[Influencia tamaño bloque cámara Amber]{Influencia del tamaño del bloque en cámara Amber para un frame cualquiera}
+ \label{Fig:AmberF1200}
+\end{figure}
+
+
+Se puede observar que al tener un número bajo de frames, las medias ponderadas que requiere calcular el método no convergen al valor deseado por lo que la corrección es de baja calidad. En particular se observa la presencia de \textit{Ghosting} debido a que los frames iniciales se parecen mucho y la variabilidad de los datos no es la óptima, adquiriendo cierta ``memoria'' en la media. Mediante inspección visual se puede comprobar que para $K=1000$ el nivel de \ac{NU} es relativamente bajo por lo que se podría utilizar como una posible cota. Este resultado se ve reafirmado por la Fig.~\ref{Fig:BiasSimulatedVsBlockSize} en donde se observa que con $K>800$ los resultados buenos tal como se comentó anteriormente.
+
+
+% ***********************************************************************************
+\subsection{Influencia del Tamaño del Bloque para Cámara Merlin}
+La cámara FLIR Merlin es una de las que posee mayores nouniformidades de todos los datos IR de los que se dispone, al extremo de que en ocasiones identificar a simple vista las escenas que se capturaron resulta muy difícil. Por lo mismo, presenta uno de los mayores desafíos para la aplicación de cualquier metodología de NUC, pues las imágenes tan ruidosas afectan directamente el desempeño de cualquier método.
+
+A la alta nouniformidad que poseen los datos, se le debe sumar que el frame-grabber utilizado en digitalizar las señales presentaba limitaciones prácticas para la captura. Solamente permitía digitalizar a 8 bits, comprimiendo el video en formato MPG y con una interpolación de 320$\times$240 (resolución real del \ac{FPA}) a una de 720$\times$480. La información del algoritmo de interpolación estaba oculta al usuario final, por lo que no se podía hacer ningun tipo de operación inversa eficiente. Todo esto involucró problemas adicionales como, redimensionar los videos hacia su tamaño original, descomprimir en formato AVI, etc. 
+
+Adicionalmente se puede mencionar que los datos fueron capturados en un laboratorio cerrado, iluminado sólo con luz artificial, por lo que la información IR corresponde principalmente a la emisión de cada cuerpo. 
+
+En las Figuras \ref{Fig:MerlinF200} y \ref{Fig:MerlinF850} se muestran los resultados de la aplicación del filtro para distintos números de $K$. Al igual que los casos anteriores se presentan los bloques con 100, 500, 1000 y 1300 frames.
+
+\begin{figure}[tbp]
+ \centering
+ \subfigure[Frame Corrupto] {\includegraphics[scale=0.5]{Figures/MerlinUnc}}\label{Fig:AmberUnc0}
+ \subfigure[Frame Original]  {\includegraphics[scale=0.5]{Figures/MerlinF200-B0100}}\label{Fig:F120B100}\\
+ \subfigure[K=500] {\includegraphics[scale=0.5]{Figures/MerlinF200-B0500}}\label{Fig:F120B500}
+ \subfigure[K=1000] {\includegraphics[scale=0.5]{Figures/MerlinF200-B1000}}\label{Fig:F120B1000}\\
+ \subfigure[K=1300] {\includegraphics[scale=0.5]{Figures/MerlinF200-B1300}}\label{Fig:F120B1300}
+ \caption[Influencia tamaño bloque cámara Merlin]{Influencia del tamaño del bloque en cámara Merlin para un frame cualquiera}
+ \label{Fig:MerlinF200}
+\end{figure}
+
+
+\begin{figure}[tbp]
+ \centering
+ \subfigure[Frame Corrupto] {\includegraphics[scale=0.5]{Figures/MerlinUnc2}}\label{Fig:AmberUnc0}
+ \subfigure[Frame Original]  {\includegraphics[scale=0.5]{Figures/MerlinF850-B0100}}\label{Fig:F120B100}\\
+ \subfigure[K=500] {\includegraphics[scale=0.5]{Figures/MerlinF850-B0500}}\label{Fig:F120B500}
+ \subfigure[K=1000] {\includegraphics[scale=0.5]{Figures/MerlinF850-B1000}}\label{Fig:F120B1000}\\
+ \subfigure[K=1300] {\includegraphics[scale=0.5]{Figures/MerlinF850-B1300}}\label{Fig:F120B1300}
+ \caption[Influencia tamaño bloque cámara Merlin]{Influencia del tamaño del bloque en cámara Merlin para un frame cualquiera}
+ \label{Fig:MerlinF850}
+\end{figure}
+
+Resulta evidente que, dada la alta nouniformidad que presentan los frames sin corregir, la compensación de offset no resulta ser tan suave y agradable a la vista como lo es para la cámara Amber. Al realizar una inspección visual de los resultados se puede notar que nuevamente existe la presencia de \textit{ghosting} en las secuencias de salida. Este defecto, que es común a todos los métodos basados en procesamiento de imágenes o señales, una vez más se debe a la gran presencia de frames repetidos en el video de entrada.
+
+De las figuras con resultados y de los análisis teóricos que se ha dado a conocer en el presente Informe de Tesis, se extrae como primera impresión que el algoritmo de corrección basado en un sistema de cancelación de ruido logra buenos resultados eliminando el ruido espacial aditivo presente en las secuencias de imágenes, sin importar la tecnología o la cámara con la que los datos hayan sido capturados. Se notan pequeñas diferencias en la corrección de datos exteriores (cámara Amber) en donde la cantidad de información óptica es alta dada la radiación solar, frente a la de interiores (cámara Merlín) en donde la radiación \ac{IR} capturada corresponde a la emitida por los cuerpos.
+
+
+% ***********************************************************************************
+% ***********************************************************************************
+\section{Contrastación de resultados}
+Como se dijo al momento de definir el coeficiente de rugosidad, este no representa una métrica óptima de comparación por si sola, pues no mide ninguna relación de estimación sino que sólo evalúa la suavidad de una imagen. Sin embargo, su poder radica en que no requiere ninguna referencia para entregar información, por lo que bien analizada mediante una evaluación a ojo desnudo de las secuencias corregidas, resulta ser muy útil.
+
+Esto se justifica al considerar que la presencia de ruido espacial en la imagen involucra altas frecuencias espaciales, por lo que al reducir la nouniformidad de una imagen se debe también reducir su rugosidad. Además si se tiene en cuenta que el fin de lograr una buena estimación radica en que el usuario final de la información capturada por la cámara vea imágenes sin ruido, se justifica que una imagen más suave que la original es generalmente preferible.
+
+A continuación se presenta la contrastación del método propuesto en relación a la rugosidad presente en los datos corregidos de ambas cámaras. Para el caso de la cámara Amber se posee información de cuerpos negros, por lo que se puede realizar la estimación con TPC y determinar la rugosidad ideal a la que se debería llegar con cualquier corrección de procesamiento de señales; esto de discutió al momento de presentar la Fig.~\ref{Fig:RoughnessTPC}.
+
+Para evaluar la efectividad de un método mediante el coeficiente de rugosidad se debe, en primera instancia, definir que se entenderá por buena y mala corrección. En términos técnicos, se deben definir cotas superiores e inferiores para el coeficiente. Dado que no se quiere una imagen con frecuencia espacial superior a la original, se define como cota superior la rugosidad que presenta la imagen sin corregir. Para la cota inferior no existe valor, sin embargo la \ac{TPC} corresponde a la mejor alternativa posible por lo que se puede definir como la cota inferior. A pesar de esto, si alguna metodología lograra una rugosidad menor no se puede inferir que sea mejor o peor que \ac{TPC} sin antes hacer una evaluación al ojo desnudo.
+
+\begin{figure}[tb]
+ \centering
+ \subfigure[Rugosidad para cámara Amber] {\includegraphics[scale=0.45]{Figures/RoughnessAmberBW}\label{Fig:RoughnessAmber}}
+ \subfigure[Rugosidad para cámara Merlin]  {\includegraphics[scale=0.45]{Figures/RoughnessMerlinBW}\label{Fig:RoughnessMerlinBW}}
+ \caption{Contrastación de Resultados mediante coeficiente de rugosidad}
+\end{figure}
+
+Resulta muy importante notar que ambas gráficas se mantienen bajo la cota superior, por lo que la eliminacion de componentes de alta frecuencia en las imágenes de entrada resulta efectiva obteniendo imágenes más suaves que las originales. Este punto, sumado a una evaluación de ojo desnudo de los resultados que se presentaron en las secciones anteriores, permite  deducir que el método planteado es una buena alternativa de \ac{NUC} a pesar de la simplicidad de la fórmula y las consideraciones no restrictivas que se impusieron sobre el método.
+
+Para contrastación con RMSE de la cámara Amber, referirse a Fig.~\ref{Fig:ContrastacionRMSE} en donde se encontraron los parámetros óptimos de corrección. Dado que no se posee información de cuerpos negros para la cámara Merlin, no se incluye contrastación de resultados mediante esta métrica.
+
+Usando el RMSE, se comparó el algoritmo con dos técnicas clásicas que se encuentran en la literatura: Estadísticas Constantes de Harris, \cite{harris-cs}, y el Algoritmo Adaptivo Estadístico de Hayat presentado en \cite{hayat-ASA}. Como referencia, nuevamente se utilizaron calibración de laboratorio de dos puntos, \ac{TPC}. El resultado principal de dicho estudio se presenta en la Fig.~\ref{Fig:RMSE_CS_NCS}. Se puede notar que el algoritmo basado en un sistema de cancelación de ruido tiene un desempeño similar al logrado por Harris, pero la diferencia principal es que las consideraciones realizadas para el desarrollo del presente algoritmo resultan ser mucho más sencillas y fáciles de satisfacer que las hechas por Harris: No se impuso una radiación incidente con distribución Gaussiana, media nula y varianza unitaria.
+
+\begin{figure}[tb]
+ \centering
+ \includegraphics[scale=0.5]{Figures/RMSE_CS_NCS}
+ \caption{Contrastación de Resultados mediante RMSE con técnicas clásicas de NUC}
+ \label{Fig:RMSE_CS_NCS}
+\end{figure}

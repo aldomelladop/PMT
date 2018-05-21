@@ -1,0 +1,33 @@
+% ***********************************************************************************
+% ---------------------                PORTADA                  ---------------------
+% ***********************************************************************************
+%MEMBRETE
+\includegraphics[width=1.5cm]{Figures/Escudo}
+\put(10,38){UNIVERSIDAD DE CONCEPCIÓN}
+\put(10,23){FACULTAD DE INGENIERÍA}
+\put(10,8){DEPARTAMENTO DE INGENIERÍA ELÉCTRICA}
+
+
+\vspace{0.3cm}
+\large
+\begin{flushright}
+\textbf{Prof. Patrocinante:}\\ Sergio N. Torres, PhD.
+\end{flushright}
+
+\vspace{3.5cm}
+\begin{center}
+\LARGE \textbf{Corrección de No-Uniformidad en Sensores Infrarrojos Basado en un Sistema 
+				de Cancelación de Ruido} \\
+
+\vspace{1cm}
+\Large \textbf{Sebastián Eugenio Godoy Medel}
+
+\vspace{0.9cm}
+Informe de Memoria de Título para optar al Título de \\Ingeniero Civil Electrónico.
+
+\vspace{2.5cm}
+Concepción, Chile. \\
+%\today
+Febrero 2007.
+\end{center}
+\normalsize
