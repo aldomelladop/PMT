@@ -151,7 +151,15 @@
 \bibitem{dan} \textsc{Dantzig, G.B.} y \textsc{P. Wolfe},
 <<Decomposition principle for linear programs>>,
 \textit{Operations Research}, \textbf{8}, págs. 101--111, 1960.
+
+\bibitem{1} \textsc{Zahid Farid, Rosdiadee Nordin} y \textsc{Mahamod Ismail}, <<Recent Advances in Wireless Indoor Localization Techniques
+and System>>, \textit{Journal of Computer Networks and Communications}, 2013.
+\bibitem{2} \textsc{Zhao Kai, Li Binghao} y \textsc{Andrew Dempster}, <<A Comparison of algorithms adopted in fingerprinting indoor positioning systems>>, \textit{IGNSS Symposium}, 2013.
+\bibitem{3} \textsc{Mayur Tawari},\textsc{Onkar Pathak}, y \textsc{Rajesh Palkar}, <<Wi-Fi Indoor Positioning System
+Based on RSSI Measurements from Wi-Fi Access Points –A Tri-lateration Approach>>, \textit{International Journal of Scientific \& Engineering Research. V5}, 2014.
 \end{thebibliography}
+
+
 % **********************************************************************************
 % índice alfabético
 % \newpage
