@@ -7,16 +7,17 @@
 % ***********************************************************************************
 \section{Antecedentes Históricos}
 
-En la década de los 60's el Departamento de Defensa de los Estados Unidos desarrolló el primer prototipo de un sistema de geolocalización basado en el cálculo de la diferencia de fases de la señales emitidas desde un satélite a estaciones terrestres, lo que les permitía determinar su posición. Años más tarde, en la década de los 70's los programas de la armada y de la Fuerza Aérea desarrollaron un sistema mejorado que les permitía determinar posiciones en el planeta mediante el uso de 24 satélites dispuestos a 20.200 km.\\
+En la década de los 60's, el Departamento de Defensa de los Estados Unidos desarrolló el primer prototipo de un sistema de geolocalización basado en el cálculo de la diferencia de fases de la señales emitidas desde un satélite a estaciones terrestres, lo que les permitía determinar su posición. Años más tarde, en la década de los 70's, los programas de la armada y de la Fuerza Aérea desarrollaron un sistema que les permitía determinar posiciones mediante el uso de 24 satélites dispuestos a una órbita a 20.200 km sobre la superficie terrestre.\\
 
-Mediante el uso de un método matemático llamado Trilateración, son capaces de usar los satélites y la cobertura estos hacen sobre la superficie de la tierra, para comparar la posición del dispositivo, con otras 3 unidades fijas de distancia. Las mediciones y la cobertura de este sistema se hace más exacta conforme se cubren más áreas, de ahí la necesidad de 24 satélites.\\
+Mediante el uso del método matemático llamado Trilateración, usan los satélites, y la cobertura que estos hacen sobre la superficie de la tierra, para comparar la posición del dispositivo, respecto de otras 3 unidades fijas de distancia. Las mediciones y la cobertura de este sistema se hacen más exactas conforme se cubre más áreas, de ahí la necesidad de 24 satélites.\\
 
-Sin embargo, dicho método no aplica para espacios interiores (indoor) y es allí donde aparecen prototipos de GPS para indoors, también llamados Sistemas de Posicionamiento Indoor (\ac{IPS}) en los que implementaciones como las hechas por Google que, tras añadir a su aplicación Google Maps planos de pisos en centros comerciales, aeropuertos y otras grandes áreas comerciales, permiten al usuario moverse estando en conocimiento de accesos, salidas de emergencia y ubicaciones de tiendas. 
+Sin embargo, el uso del GPS no aplica para espacios interiores, por este motivo aparecen prototipos de GPS para indoors, también llamados Sistemas de Posicionamiento Interior o (\ac{IPS}) en los que implementaciones recientes como las hechas por Google que, tras añadir a su aplicación Google Maps planos de pisos en centros comerciales, aeropuertos y otras grandes áreas comerciales, permiten al usuario moverse estando en conocimiento de accesos, salidas de emergencia y ubicaciones de tiendas. 
+
 % ***********************************************************************************
 % ***********************************************************************************
 \section{Definición del Problema}
 
-Para personas con algún tipo de discapacidad es de por sí muy tedioso y dificil hallar un lugar en el estacionamiento, encontrar un acceso habilitado para sillas de ruedas, ascensores y baños, especialmente si se trata de algún usuario que se halla de paso en la ciudad.\\
+Para personas con algún tipo de discapacidad es de por sí muy tedioso y difícil hallar un lugar en el estacionamiento, encontrar un acceso habilitado para sillas de ruedas, ascensores y baños, especialmente si se trata de algún usuario que se halla de paso en la ciudad.\\
 
 Además de lo anterior, es sabido que para las tiendas de retail es importante poder concentrar de mejor manera sus esfuerzos para captar clientes y comprender el comportamiento basado en el interés que estos muestran por determinados productos y la forma en que la disposición de estos influye en sus hábitos de compra.\\
 
@@ -28,6 +29,15 @@ La utilidad y aplicabilidad de este sistema, tal como lo menciona un informe  so
 % ***********************************************************************************
 \section{Estado del Arte}
 
+En abril del año 2014, en International Journal of Scientific and Engineering Research se publicó el artículo "Wifi Indoor Positioning System Based on RSSI Measurements from Wi-fi Access Points - A Tri-lateration Approach", en que Pratik Palaskar y Onkar Pathak, entre otros autores hablan de un algoritmo para obtener la posición de un usuario al interior de un espacio indoor mediante el cálculo de la distancia respecto de tres diferentes puntos de acceso o \ac{AP}, en que además de calcular la distancia, se busca el punto de intersección entre tres circunferencias que representa el área de cobertura del AP. En el además se hace uso de los valores de distancia de propagación que entrega la ecuación de Friis y el modelo de propagación indoor en espacio interior.\\
+
+En el trabajo que hicieron, hablan de este modelo básico de decaimiento de la señal en espacio interior, el cual, está sujeto a las reflexiones, refracciones y atenuaciones y el cual mediante la consideración de los parámetros anteriores y de lo que se puede expresar en la ecuación 1.1\\
+
+\begin{equation}
+P(X) = 10\cdot{n}\cdot{log\left({\dfrac{d}{d_0}}\right)} + 20\cdot{log\left({\dfrac{4\pi d_0}{\lambda}}\right)}
+\end{equation}
+
+Tal que \textit{P(X)}, es la pérdida por ruta, \textit{n}, es el exponente de decaimiento de la señal, \textit{d}, es la distancia entre el transmisor y el receptor, \textit{$d_0$}, la distancia de referencia\footnote{Considerada como 1 m}, \textit{$\lambda$} es la longitud de onda de la señal a $f = 2.4$ GHz, finalmente se tiene que el  último parámetro, esto es \textit{$X_{\sigma}$} debe calcularse en sitio, esto debido a que varía la cantidad de muros, no obstante, se considera con un valor de $X_{\sigma} = 10$ dB. 
 
 % ***********************************************************************************
 % ***********************************************************************************
