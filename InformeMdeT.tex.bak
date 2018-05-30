@@ -71,14 +71,15 @@
 \tableofcontents
 
 % INDICE DE FIGURAS: No es requerido, pero se agradece por facilitar corrección
-\newpage
-\listoffigures
-\addcontentsline{toc}{chapter}{\listfigurename}
+
+%\newpage
+%\listoffigures
+%\addcontentsline{toc}{chapter}{\listfigurename}
 
 % % INDICE DE TABLAS: No es requerido, pero se agradece por facilitar corrección
-\newpage
-\listoftables
-\addcontentsline{toc}{chapter}{\listtablename}
+%\newpage
+%\listoftables
+%\addcontentsline{toc}{chapter}{\listtablename}
 
 \newpage
 \chapter*{Lista de Acrónimos}
@@ -87,14 +88,17 @@
 \addcontentsline{toc}{chapter}{Índice de Acrónimos}
 % ***********************************************************************************
 % Acronym definitions
+
+\acrodefplural{AP}[AP's]{Access Points}
+
+
 \begin{acronym}
 \acro{GPS}{Global Positioning System}   	
 \acro{WiFi}{Wireless Fidelity}
 \acro{AP}{Access Point}
-\acrodefplural{APs}{Puntos de Acceso}
 \acro{IPS}{Indoor Positioning System}
 \acro{RSS}{Received Signal Strength}
-\acro{AoA}{Angle of Arrival}
+\acro{AOA}{Angle of Arrival}
 \acro{TOA}{Time of Arrival}
 \acro{MAC}{Media Access Control}
 
@@ -124,13 +128,13 @@
 \input{Chapters/Cap3}
 
 % ***********************************************************************************
-\newpage
-\input{Chapters/ResultadosAnalisis}
+%\newpage
+%\input{Chapters/ResultadosAnalisis}
 
 
 % ***********************************************************************************
 \newpage
-\input{Chapters/Conclusiones}
+%\input{Chapters/Conclusiones}
 
 
  % ***********************************************************************************
@@ -139,8 +143,15 @@
  \newpage
  \bibliographystyle{unsrt}
  \bibliography{/home/sb/LatexStuffs/books}
- \addcontentsline{toc}{chapter}{Bibliografía}
-
+% \addcontentsline{toc}{chapter}{Bibliografía}
+\begin{thebibliography}{X}
+%\bibitem{Baz} \textsc{Bazaraa, M.S., J.J. Jarvis} y \textsc{H.D. Sherali},
+%\textit{Programaci\’on lineal y flujo en redes}, segunda edici\’on,
+%Limusa, M\’exico, DF, 2004.\\
+\bibitem{dan} \textsc{Dantzig, G.B.} y \textsc{P. Wolfe},
+<<Decomposition principle for linear programs>>,
+\textit{Operations Research}, \textbf{8}, págs. 101--111, 1960.
+\end{thebibliography}
 % **********************************************************************************
 % índice alfabético
 % \newpage
