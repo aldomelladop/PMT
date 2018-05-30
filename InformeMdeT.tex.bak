@@ -89,23 +89,23 @@
 % ***********************************************************************************
 % Acronym definitions
 \begin{acronym}
-\acro{IR}{Infrarroja}
 \acro{GPS}{Global Positioning System}   	
+\acro{WiFi}{Wireless Fidelity}
 \acro{AP}{Access Point}
 \acrodefplural{APs}{Puntos de Acceso}
 \acro{IPS}{Sistema de posicionamiento Indoor}
 \acro{AoA}{Angle of Arrival}
 \acro{TOA}{Time of Arrival}
+\acro{MAC}{Media Access Control}
+\acro{CAM}{Control de Acceso al Medio}
 \end{acronym}
 
 % ***********************************************************************************
-
-
 % ***********************************************************************************
-\newpage
-\input{Chapters/Thnks}
-\addcontentsline{toc}{chapter}{Agradecimientos}
-
+%\newpage
+%\input{Chapters/Thnks}
+%\addcontentsline{toc}{chapter}{Agradecimientos}
+%
 
 % ***********************************************************************************
 \newpage
