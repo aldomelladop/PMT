@@ -46,6 +46,7 @@ Tal que \textit{P(X)}, es la pérdida por ruta, \textit{n}, es el exponente de d
 
 El modelo de propagación indoor les permitió obtener valores de la distancia entre donde se ubicaba el AP y donde se hallaba el usuario. Esto es fundamental al desarrollar un \ac{IPS} dado que este algoritmo lo que hace es calcular la posición exacta de un usuario dada la posición exacta de un AP, de modo que la poca precisión de estas resultaría en una imprecisión generalizada del algoritmo. \\
 
+\newpage 
 Además de lo anterior, se tiene que lo que en realidad es la base de este método, es un sistema de ecuaciones de tres incógnitas que calculan la ubicación espacial del usuario.\\
 
 Al trabajar con la trilateración se prescinde de un seguimiento por dirección MAC, ya que solo se trabajó y aplicó para un dispositivo, sin llegar a una tabulación de resultados para distintos dispositivos trabajando en simultáneo.\\
@@ -73,8 +74,7 @@ and System'' se tiene que este tipo de algoritmos ayuda a estimar la ubicación 
 % ***********************************************************************************
 \subsection{Objetivo General}
 
-Investigar y desarrollar un algoritmo para la memoria de título que permita hacer seguimiento de un dispositivo en un espacio indoor haciendo el seguimiento de las solicitudes de ICMPV6 recibidas por los distintos AP a los que un usuario realiza solicitudes.
-
+Investigar para en la memoria de título, desarrollar un algoritmo que permita estimar la posición de un usuario en un espacio ind
 % ***********************************************************************************
 \subsection{Objetivos Específicos}
 \begin{itemize}

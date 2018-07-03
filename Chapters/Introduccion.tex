@@ -46,6 +46,7 @@ Tal que \textit{P(X)}, es la pérdida por ruta, \textit{n}, es el exponente de d
 
 El modelo de propagación indoor les permitió obtener valores de la distancia entre donde se ubicaba el AP y donde se hallaba el usuario. Esto es fundamental al desarrollar un \ac{IPS} dado que este algoritmo lo que hace es calcular la posición exacta de un usuario dada la posición exacta de un AP, de modo que la poca precisión de estas resultaría en una imprecisión generalizada del algoritmo. \\
 
+\newpage 
 Además de lo anterior, se tiene que lo que en realidad es la base de este método, es un sistema de ecuaciones de tres incógnitas que calculan la ubicación espacial del usuario.\\
 
 Al trabajar con la trilateración se prescinde de un seguimiento por dirección MAC, ya que solo se trabajó y aplicó para un dispositivo, sin llegar a una tabulación de resultados para distintos dispositivos trabajando en simultáneo.\\
@@ -73,7 +74,7 @@ and System'' se tiene que este tipo de algoritmos ayuda a estimar la ubicación 
 % ***********************************************************************************
 \subsection{Objetivo General}
 
-Investigar y desarrollar un algoritmo para la memoria de título que permita hacer seguimiento de un dispositivo en un espacio indoor haciendo el seguimiento de las solicitudes de ICMPV6 recibidas por los distintos AP a los que un usuario realiza solicitudes.
+Investigar sobre los distintos algoritmos de posicionamiento indoor, para en la memoria de título, desarrollar un sistema que permita estimar la posición de un usuario en un espacio indoor.
 
 % ***********************************************************************************
 \subsection{Objetivos Específicos}
@@ -81,8 +82,8 @@ Investigar y desarrollar un algoritmo para la memoria de título que permita hac
  \item {Investigar sobre las distintas alternativas de \ac{IPS} usadas actualmente.}
 \item{Estudiar las ventajas y desventajas existentes entre las distintas alternativas de \ac{IPS}}
 \item{Estudiar el comportamiento de una red wifi en un espacio indoor apoyado en un modelo de propagación.}
+ \item {Estudiar el modelo de pérdidas que se adecúe mejor al espacio sobre el que se harían las mediciones.}
 \item{Estudiar antecedentes sobre IPS que utilicen \ac{IRDP}}
- \item {Estudiar el modelo de pérdidas que se adecúe mejor al espacio sobre el que se desean hacer las mediciones.}
 \end{itemize}
 
 % ***********************************************************************************
@@ -91,16 +92,14 @@ Investigar y desarrollar un algoritmo para la memoria de título que permita hac
 \textit{Alcances}\\
 
 Acotar el estudio a modelos de propagación indoor que se adecuen mejor al espacio que se desea caracterizar para hacer las mediciones.\\
-
-
+Acotar el estudio a la 
 \textit{Limitaciones}\\
 
 Escoger un espacio que sea representativo para realizar las mediciones, es decir, que sea acorde a los espacios en los que podría llegar a implementarse el seguimiento.\\
-
-
+Disponibilidad de documentos que expongan y exploten la vulnerabilidad  de seguridad que supone el envío de la MAC en las solicitudes IRDP.
 
 % ***********************************************************************************
 % ***********************************************************************************
 \section{Temario y Metodología}
 
-En el segundo capítulo, se presentarán yk abordarán con mayor detalle los modelos de propagación, para así cotejar la validez y concordancia entre los valores de RSS teóricos y los recibidos, además de presentar una alternativa de estudio de IPS como es el caso del seguimiento de dispositivos móviles en base a las solicitudes que éstos envían al router cuando se desean conectar. 
+En el segundo capítulo, se presentarán y abordarán con mayor detalle los modelos de propagación, para así cotejar la validez y concordancia entre los valores de RSS teóricos y los recibidos, además de presentar una alternativa de estudio de IPS como es el caso del seguimiento de dispositivos móviles en base a las solicitudes que éstos envían al router cuando se desean conectar. 

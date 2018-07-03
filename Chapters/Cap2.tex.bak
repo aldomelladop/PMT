@@ -5,11 +5,11 @@ En el proceso de comunicación se tiene que además del emisor, el receptor y el
 
 Sin embargo, la información, considerando el volumen de datos que viajan por las redes, obedece un orden, que en redes de datos se conoce como modelo OSI.\\
 
-\newpage
 \section{Modelo OSI}
 
 Es un modelo que sirve de referencia para los protocolos que operan en las distintas capas que componen este modelo. Es un estándar desarrollado en 1980 por la ISO que establece un ordenamiento por el cual deben regirse los datos al moverse.\\
 
+\newpage
 \underline{Este modelo consta de siete capas}\\
 
 Físico, Enlace, Red, Transporte, Sesión, Presentación, Aplicación.
@@ -23,13 +23,11 @@ Corresponde a las capa que guarda relación con la conexión, es decir, con la f
 \subsection{Capa de Enlace}
 Esta capa representa para efectos de lo que se pretende investigar y eventualmente desarrollar, la capa que hace posible el seguimiento, pues se encarga de la transferencia de información entre la capa de red y la capa física. Y para ello se vale de tramas que le dotan al dispositivo una dirección \ac{MAC} lo que le permite hacer control de flujo, detección y corrección de errores.\\
 
-Es de esta capa que los IPS, se valen, como es el caso de el algoritmo de trilateración en donde se establece la conexión a un AP, se hace la identificación del dispositivo a través de la dirección MAC y luego el posterior cálculo.\\
-
-\newpage
+Es de esta capa que los IPS, se valen, como es el caso de el algoritmo de trilateración en donde se establece la conexión a un AP, se hace la identificación del dispositivo a través de la dirección MAC y luego el posterior cálculo.
 
 \section{Medio No Guiado}
 
-Corresponde a los medios por los cual viajan las ondas electromagnéticas y que en este caso, corresponden a dispositivos que se valen de antenas para propagarlas.\\
+Corresponde a los medios por los cual viajan las ondas electromagnéticas y que en este caso, corresponden a dispositivos que se valen de antenas para propagarlas.
 
 \section{Router}
 
@@ -61,7 +59,7 @@ Finalmente, se anuncian mediante una solicitud de establecimiento de conexión d
 		\caption{Ejemplo de red de infraestructura inalámbrica$^{\ref{fig:paginaHP}}$}
 \end{figure}
 
-De ser exitosa, el router, mediante el protocolo \ac{DHCP}, asigna desde el número limitado de direcciones IP que el \ac{ISP} entrega al cliente, una IP que enlaza esta dirección con la MAC del usuario estableciendo así la conexión. Es así como del router inalámbrico el dispositivo posee ahora la conexión al AP WiFi.\\\\
+De ser exitosa, el router, mediante el protocolo \ac{DHCP}, asigna desde el número limitado de direcciones IP que el \ac{ISP} entrega al cliente, una IP que enlaza esta dirección con la MAC del usuario estableciendo así la conexión. Es así como del router inalámbrico el dispositivo posee ahora la conexión al AP WiFi.
 
 \section{Wifi}
 
@@ -131,9 +129,9 @@ PL(d) =  PL_{FS} + a\cdot{d}
 Donde $a$ es el coeficiente de atenuación lineal, y $d$ es la distancia entre Tx y Rx. Este coeficiente obedece a datos tabulados según el ambiente en el que se hizo la medición y que para el caso de oficinas sería de 0.47 dB/m. 
 
 
-\subsection{Modelos basados en Redes Neuronales (ANNs)}
+\subsection{Modelos basados en Redes Neuronales (ANNs)}{\label{redesneuronales}}
 
-Este tipo de modelos, recoge las imprecisiones de modelos tales como los empíricos, donde la falta de precisión es la principal deficiencia, y de modelos deterministas que si bien otorgan precisión, son altamente ineficientes, puesto que a menudo, requieren altas capacidades de procesamiento, y basándose en redes neuronales que aprovechan una base de dats de la planta en que se desea implementar, permiten con gran rapidez llegar a resultados precisos. \\
+Este tipo de modelos, recoge las imprecisiones de modelos tales como los empíricos, donde la falta de precisión es la principal deficiencia, y de modelos deterministas que si bien otorgan precisión, son altamente ineficientes, puesto que a menudo, requieren altas capacidades de procesamiento, y basándose en redes neuronales que aprovechan una base de datos de la planta en que se desea implementar, permiten con gran rapidez llegar a resultados precisos. \\
 
 Dicha base de datos se compone de datos sobre zonas compuestas de diferentes categorías de materiales, superficies y objetos que existen en el entorno, además de la distancia entre el transmisor y el posible receptor, debiendo además, incluir información sobre el número y el tipo de materiales con que se va a encontrar la señal en las distintas categorías.\\
 

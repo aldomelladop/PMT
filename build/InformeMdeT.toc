@@ -1,6 +1,6 @@
 \babel@toc {spanish}{}
 \contentsline {chapter}{Resumen}{\es@scroman {i}}{chapter*.1}
-\contentsline {chapter}{\IeC {\'I}ndice de Acr\IeC {\'o}nimos}{\es@scroman {iii}}{chapter*.5}
+\contentsline {chapter}{\IeC {\'I}ndice de Acr\IeC {\'o}nimos}{\es@scroman {iv}}{chapter*.5}
 \contentsline {chapter}{\numberline {1}Introducci\IeC {\'o}n}{1}{chapter.1}
 \contentsline {section}{\numberline {1.1}Antecedentes Hist\IeC {\'o}ricos}{1}{section.1.1}
 \contentsline {section}{\numberline {1.2}Definici\IeC {\'o}n del Problema}{2}{section.1.2}
@@ -11,7 +11,40 @@
 \contentsline {section}{\numberline {1.5}Alcances y Limitaciones}{5}{section.1.5}
 \contentsline {section}{\numberline {1.6}Temario y Metodolog\IeC {\'\i }a}{6}{section.1.6}
 \contentsline {chapter}{\numberline {2}Marco Te\IeC {\'o}rico}{7}{chapter.2}
-\contentsline {chapter}{\numberline {3}Nombre del Cap\IeC {\'\i }tulo}{15}{chapter.3}
+\contentsline {section}{\numberline {2.1}Modelo OSI}{7}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Capa F\IeC {\'\i }sica}{8}{subsection.2.1.1}
+\contentsline {subsection}{\numberline {2.1.2}Capa de Enlace}{8}{subsection.2.1.2}
+\contentsline {section}{\numberline {2.2}Medio No Guiado}{8}{section.2.2}
+\contentsline {section}{\numberline {2.3}Router}{9}{section.2.3}
+\contentsline {section}{\numberline {2.4}Wifi}{10}{section.2.4}
+\contentsline {section}{\numberline {2.5}Modelo de propagaci\IeC {\'o}n}{12}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}Modelo de propagaci\IeC {\'o}n Indoor}{12}{subsection.2.5.1}
+\contentsline {subsection}{\numberline {2.5.2}Modelo de propagaci\IeC {\'o}n en espacio libre - Ecuaci\IeC {\'o}n de FRIIS:}{13}{subsection.2.5.2}
+\contentsline {subsection}{\numberline {2.5.3}Linear Path Attenuation Model}{13}{subsection.2.5.3}
+\contentsline {subsection}{\numberline {2.5.4}Modelos basados en Redes Neuronales (ANNs)}{14}{subsection.2.5.4}
+\contentsline {chapter}{\numberline {3}Revisi\IeC {\'o}n Bibliogr\IeC {\'a}fica}{15}{chapter.3}
 \contentsline {section}{\numberline {3.1}Introducci\IeC {\'o}n}{15}{section.3.1}
-\contentsline {section}{\numberline {3.2}Otros comentarios...}{15}{section.3.2}
-\contentsline {section}{\numberline {3.3}Referencias}{16}{section.3.3}
+\contentsline {subsection}{\numberline {3.1.1}Recent Advances in Wireless Indoor Localization Techniques and System}{15}{subsection.3.1.1}
+\contentsline {subsubsection}{Abstract}{15}{section*.16}
+\contentsline {subsection}{\numberline {3.1.2}WIFI-Based Indoor Positioning System}{16}{subsection.3.1.2}
+\contentsline {subsubsection}{Abstract}{16}{section*.17}
+\contentsline {subsection}{\numberline {3.1.3}A Comparison of algorithms adopted in figerprint indoor positioning systems}{17}{subsection.3.1.3}
+\contentsline {subsubsection}{Abstract}{17}{section*.18}
+\contentsline {subsection}{\numberline {3.1.4}Wi-Fi In-door Positioning System Based on RSSI Measurements from Wi-Fi Access Points - A Tri-lateration Approach}{18}{subsection.3.1.4}
+\contentsline {subsubsection}{Abstract}{18}{section*.19}
+\contentsline {subsection}{\numberline {3.1.5}WIFI-based indoor positioning system}{19}{subsection.3.1.5}
+\contentsline {subsubsection}{Abstract}{19}{section*.20}
+\contentsline {subsection}{\numberline {3.1.6}Mobile indoor positioning using Wifi localization and image processing}{20}{subsection.3.1.6}
+\contentsline {subsubsection}{Abstract}{20}{section*.21}
+\contentsline {subsection}{\numberline {3.1.7}Mobile indoor positioning using Wifi localization}{20}{subsection.3.1.7}
+\contentsline {subsubsection}{Abstract}{20}{section*.22}
+\contentsline {subsection}{\numberline {3.1.8}An Improved WiFi Indoor Positioning Algorithm by Weighted Fusion}{21}{subsection.3.1.8}
+\contentsline {subsubsection}{Abstract}{21}{section*.23}
+\contentsline {subsection}{\numberline {3.1.9}Characterizing Wi-Fi Network Discovery}{22}{subsection.3.1.9}
+\contentsline {subsubsection}{Abstract}{22}{section*.24}
+\contentsline {subsection}{\numberline {3.1.10}I know your MAC Address: Targeted tracking of individual using Wi-Fi}{23}{subsection.3.1.10}
+\contentsline {subsubsection}{abstract}{23}{section*.25}
+\contentsline {chapter}{\numberline {4}Conclusiones}{24}{chapter.4}
+\contentsline {section}{\numberline {4.1}Sumario}{24}{section.4.1}
+\contentsline {section}{\numberline {4.2}Conclusiones}{24}{section.4.2}
+\contentsline {section}{\numberline {4.3}Trabajo Futuro}{24}{section.4.3}
