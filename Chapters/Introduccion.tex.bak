@@ -102,4 +102,4 @@ Escoger un espacio que sea representativo para realizar las mediciones, es decir
 % ***********************************************************************************
 \section{Temario y Metodología}
 
-En el segundo capítulo, se abordarán con mayor detalle los modelos de propagación para así poder cotejar la validez y concordancia entre los valores de RSS teóricos y los recibidos, ya que de este modo se tendrá mejor entendimiento respecto de cómo obtener los valores. En el tercer capítulo se hablará de cómo se desarrollará el algoritmo, pasando por el razonamiento subyacente a la idea que se pretende implementar, hasta llegar a la
+En el segundo capítulo, se abordarán con mayor detalle los modelos de propagación para así poder cotejar la validez y concordancia entre los valores de RSS teóricos y los recibidos, además de presentar una alternativa de estudio de IPS como es el caso del seguimiento de dispositivos móviles en base a las solicitudes que éstos envían al router cuando se desean cone
