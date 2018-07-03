@@ -34,17 +34,15 @@
 \contentsline {subsubsection}{Abstract}{18}{section*.19}
 \contentsline {subsection}{\numberline {3.1.5}WIFI-based indoor positioning system}{19}{subsection.3.1.5}
 \contentsline {subsubsection}{Abstract}{19}{section*.20}
-\contentsline {subsection}{\numberline {3.1.6}Mobile indoor positioning using Wifi localization and image processing}{20}{subsection.3.1.6}
+\contentsline {subsection}{\numberline {3.1.6}Mobile indoor positioning using Wifi localization}{20}{subsection.3.1.6}
 \contentsline {subsubsection}{Abstract}{20}{section*.21}
-\contentsline {subsection}{\numberline {3.1.7}Mobile indoor positioning using Wifi localization}{20}{subsection.3.1.7}
-\contentsline {subsubsection}{Abstract}{20}{section*.22}
-\contentsline {subsection}{\numberline {3.1.8}An Improved WiFi Indoor Positioning Algorithm by Weighted Fusion}{21}{subsection.3.1.8}
-\contentsline {subsubsection}{Abstract}{21}{section*.23}
-\contentsline {subsection}{\numberline {3.1.9}Characterizing Wi-Fi Network Discovery}{22}{subsection.3.1.9}
-\contentsline {subsubsection}{Abstract}{22}{section*.24}
-\contentsline {subsection}{\numberline {3.1.10}I know your MAC Address: Targeted tracking of individual using Wi-Fi}{23}{subsection.3.1.10}
-\contentsline {subsubsection}{abstract}{23}{section*.25}
-\contentsline {chapter}{\numberline {4}Conclusiones}{24}{chapter.4}
-\contentsline {section}{\numberline {4.1}Sumario}{24}{section.4.1}
-\contentsline {section}{\numberline {4.2}Conclusiones}{24}{section.4.2}
-\contentsline {section}{\numberline {4.3}Trabajo Futuro}{24}{section.4.3}
+\contentsline {subsection}{\numberline {3.1.7}An Improved WiFi Indoor Positioning Algorithm by Weighted Fusion}{21}{subsection.3.1.7}
+\contentsline {subsubsection}{Abstract}{21}{section*.22}
+\contentsline {subsection}{\numberline {3.1.8}Characterizing Wi-Fi Network Discovery}{22}{subsection.3.1.8}
+\contentsline {subsubsection}{Abstract}{22}{section*.23}
+\contentsline {subsection}{\numberline {3.1.9}I know your MAC Address: Targeted tracking of individual using Wi-Fi}{24}{subsection.3.1.9}
+\contentsline {subsubsection}{abstract}{24}{section*.24}
+\contentsline {chapter}{\numberline {4}Conclusiones}{26}{chapter.4}
+\contentsline {section}{\numberline {4.1}Sumario}{26}{section.4.1}
+\contentsline {section}{\numberline {4.2}Conclusiones}{26}{section.4.2}
+\contentsline {section}{\numberline {4.3}Trabajo Futuro}{27}{section.4.3}

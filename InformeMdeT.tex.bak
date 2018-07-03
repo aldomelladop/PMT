@@ -70,16 +70,16 @@
 \newpage
 \tableofcontents
 
-% INDICE DE FIGURAS: No es requerido, pero se agradece por facilitar corrección
-
-%\newpage
-%\listoffigures
-%\addcontentsline{toc}{chapter}{\listfigurename}
+% INDIC
 
 % % INDICE DE TABLAS: No es requerido, pero se agradece por facilitar corrección
 %\newpage
 %\listoftables
-%\addcontentsline{toc}{chapter}{\listtablename}
+%\addcontentsline{toc}{chaptE DE FIGURAS: No es requerido, pero se agradece por facilitar corrección
+
+%\newpage
+%\listoffigures
+%\addcontentsline{toc}{chapter}{\listfigurename}er}{\listtablename}
 
 \newpage
 \chapter*{Lista de Acrónimos}
@@ -106,6 +106,7 @@
 \acro{RSS}{Received Signal Strength}
 \acro{AOA}{Angle of Arrival}
 \acro{TOA}{Time of Arrival}
+\acro{SSID}{Service Set Identifier}
 \end{acronym}
 
 % ***********************************************************************************
