@@ -32,7 +32,7 @@ La utilidad y aplicabilidad de este sistema, tal como lo menciona un informe  so
 % ***********************************************************************************
 \section{Estado del Arte}
 
-\textit{Trilateración}\\
+\underline{\textit{Trilateración}}\\
 
 En abril del año 2014, en International Journal of Scientific and Engineering Research se publicó el artículo "Wifi Indoor Positioning System Based on RSSI Measurements from Wi-fi Access Points - A Tri-lateration Approach", en que Pratik Palaskar y Onkar Pathak, entre otros autores hablan de un algoritmo para obtener la posición de un usuario al interior de un espacio indoor mediante el cálculo de la distancia respecto de tres diferentes puntos de acceso o \ac{AP}, en que además de calcular la distancia, se busca el punto de intersección entre tres circunferencias que representa el área de cobertura del AP. En el además se hace uso de los valores de distancia de propagación que entrega la ecuación de Friis y el modelo de propagación indoor en espacio interior.\\
 
@@ -42,24 +42,24 @@ En el trabajo que hicieron, hablan de este modelo básico de decaimiento de la s
 P(X) = 10\cdot{n}\cdot{log\left({\dfrac{d}{d_0}}\right)} + 20\cdot{log\left({\dfrac{4\pi d_0}{\lambda}}\right)}  + X_{\sigma}
 \end{equation}
 
-Tal que \textit{P(X)}, es la pérdida por ruta, \textit{n}, es el exponente de decaimiento de la señal, \textit{d}, es la distancia entre el transmisor y el receptor, \textit{$d_0$}, la distancia de referencia\footnote{Considerada como 1 m}, \textit{$\lambda$} es la longitud de onda de la señal a $f = 2.4$ GHz, finalmente se tiene que el  último parámetro, esto es \textit{$X_{\sigma}$} debe calcularse en sitio, esto debido a que varía la cantidad de muros, no obstante, se considera con un valor de $X_{\sigma} = 10$ dB.\\
+Tal que \textit{P(X)}, es la pérdida por ruta, \textit{n}, es el exponente de decaimiento de la señal, \textit{d}, es la distancia entre el transmisor y el receptor, \textit{$d_0$}, la distancia de referencia\footnote{Considerada como 1 m}, \textit{$\lambda$} es la longitud de onda de la señal a $f = 2.4$ GHz. Finalmente se tiene que el  último parámetro, esto es \textit{$X_{\sigma}$} debe calcularse en sitio, esto debido a que varía la cantidad de muros, no obstante, se considera con un valor de $X_{\sigma} = 10$ dB.\\
 
-El modelo de propagación indoor les permitió obtener valores de la distancia entre donde se ubicaba el AP y donde se hallaba el usuario. Esto es fundamental al desarrollar un \ac{IPS} dado que este algoritmo lo que hace es calcular la posición exacta de un suuario dada la posición exacta de un AP, de modo que la poca precisión de estas resultaría en una imprecisión generalizada del algoritmo. \\
+El modelo de propagación indoor les permitió obtener valores de la distancia entre donde se ubicaba el AP y donde se hallaba el usuario. Esto es fundamental al desarrollar un \ac{IPS} dado que este algoritmo lo que hace es calcular la posición exacta de un usuario dada la posición exacta de un AP, de modo que la poca precisión de estas resultaría en una imprecisión generalizada del algoritmo. \\
 
 Además de lo anterior, se tiene que lo que en realidad es la base de este método, es un sistema de ecuaciones de tres incógnitas que calculan la ubicación espacial del usuario.\\
 
 Al trabajar con la trilateración se prescinde de un seguimiento por dirección MAC, ya que solo se trabajó y aplicó para un dispositivo, sin llegar a una tabulación de resultados para distintos dispositivos trabajando en simultáneo.\\
 
-\textit{Triangulación}\\
+\underline{\textit{Triangulación}}\\
 
-Por otro lado, existen otras formas, alternativas a la de trilateración, como el que presentan en ''A Comparison of algorithms adopted in fingerprinting indoor positioning systems'' en donde lo que se hace, es basar la estimación de la ubicación del objetivo, en las propiedades geométricas de los triángulos, a diferencia de lo que se presentaba en \textbf{ref{6}}, en que se proponía hacerlo usando la intersección de las circunferencias que representaban a los \acp{AP}. En esta forma, se ocupan parámetros tales como el \ac{TOA}, el \ac{AOA} y  el \ac{RSS} para pdoer hacer el cálculo. Estos parámetros son entregados directamente por los \acp{AP} y se usan para calcular las distancias entre el objetivo y los AP's, al igual que lo que se plantea en  \textbf{ref{6}} se debe disponer de a lo menos 3 AP's para poder estimar su ubicación.\\
+Por otro lado, existen otras formas, alternativas a la de trilateración, como el que presentan en ''A Comparison of algorithms adopted in fingerprinting indoor positioning systems'' en donde lo que se hace, es basar la estimación de la ubicación del objetivo, en las propiedades geométricas de los triángulos, a diferencia de lo que se presentaba en \cite{1}, en que se proponía hacerlo usando la intersección de las circunferencias que representaban a los \acp{AP}. En esta forma, se ocupan parámetros tales como el \ac{TOA}, el \ac{AOA} y  el \ac{RSS} para pdoer hacer el cálculo. Estos parámetros son entregados directamente por los \acp{AP} y se usan para calcular las distancias entre el objetivo y los AP's, al igual que lo que se plantea en  \cite{1} se debe disponer de a lo menos 3 AP's para poder estimar su ubicación.\\
 
-\textit{Algoritmos de Proximidad}\\
+\underline{\textit{Algoritmos de Proximidad}}\\
 
 En el texto de ''Recent Advances in Wireless Indoor Localization Techniques
 and System'' se tiene que este tipo de algoritmos ayuda a estimar la ubicación del objetivo usando la relación de proximidad entre el objetivo y los puntos de acceso Wifi. Esto es, cuando el dispositivo móvil recibe la señal desde diferentes \acp{AP}, la compara a partir de las señales recibidas  se la asigna al AP con la RSS más fuerte. La precisión de este algoritmo está dada por la densidad de distribución y la señal de los AP Wifi.\\
 
-Como se puede ver en \cite[pág 21]{dan} ...
+%%Como se puede ver en \cite[pág 21]{dan} ...
 
 
 % ***********************************************************************************
@@ -73,15 +73,16 @@ Como se puede ver en \cite[pág 21]{dan} ...
 % ***********************************************************************************
 \subsection{Objetivo General}
 
-Investigar y desarrollar un algoritmo para la memoria de título que permita hacer seguimiento de un dispositivo en un espacio indoor haciendo uso modelos de propagación indoor y algoritmos de trilateración.
+Investigar y desarrollar un algoritmo para la memoria de título que permita hacer seguimiento de un dispositivo en un espacio indoor haciendo el seguimiento de las solicitudes de ICMPV6 recibidas por los distintos AP a los que un usuario realiza solicitudes.
 
 % ***********************************************************************************
 \subsection{Objetivos Específicos}
 \begin{itemize}
  \item {Investigar sobre las distintas alternativas de \ac{IPS} usadas actualmente.}
+\item{Estudiar las ventajas y desventajas existentes entre las distintas alternativas de \ac{IPS}}
 \item{Estudiar el comportamiento de una red wifi en un espacio indoor apoyado en un modelo de propagación.}
+\item{Estudiar antecedentes sobre IPS que utilicen \ac{IRDP}}
  \item {Estudiar el modelo de pérdidas que se adecúe mejor al espacio sobre el que se desean hacer las mediciones.}
-% \item{Desarrollar un algoritmo que permita hacer uso de los datos obtenidos para obtener la posición del usuario y así hacer el seguimiento.}
 \end{itemize}
 
 % ***********************************************************************************
@@ -90,6 +91,7 @@ Investigar y desarrollar un algoritmo para la memoria de título que permita hac
 \textit{Alcances}\\
 
 Acotar el estudio a modelos de propagación indoor que se adecuen mejor al espacio que se desea caracterizar para hacer las mediciones.\\
+
 
 \textit{Limitaciones}\\
 
